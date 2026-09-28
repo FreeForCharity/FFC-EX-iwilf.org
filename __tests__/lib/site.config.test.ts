@@ -1,12 +1,15 @@
 import {
   canonicalPath,
   cardDescription,
+  isPending,
+  type PendingField,
   mailtoHref,
   siteConfig,
   sitePath,
   siteUrl,
   twitterSite,
 } from '../../src/lib/site.config'
+import { team } from '../../src/data/team'
 
 const originalBasePath = process.env.NEXT_PUBLIC_BASE_PATH
 
@@ -73,7 +76,8 @@ describe('siteConfig contract', () => {
     }
 
     // IRS EIN format: two digits, hyphen, seven digits.
-    expect(siteConfig.ein).toMatch(/^\d{2}-\d{7}$/)
+    // A pending EIN is empty (see the pending contract below).
+    expect(siteConfig.ein).toMatch(isPending('ein') ? /^$/ : /^\d{2}-\d{7}$/)
 
     expect(typeof siteConfig.phone.display).toBe('string')
     expect(typeof siteConfig.phone.tel).toBe('string')
@@ -158,6 +162,35 @@ describe('siteConfig contract', () => {
 
     expect(cardDescription()).toBe(siteConfig.shortDescription.trim() || siteConfig.description)
     expect(cardDescription().trim().length).toBeGreaterThan(0)
+  })
+})
+
+describe('siteConfig.pending contract', () => {
+  // Every PendingField, mapped to "its value is empty". A pending field must
+  // carry no value, so no placeholder or borrowed (template/FFC) value can
+  // ship behind the "awaiting information" notice.
+  const isEmpty: Record<PendingField, () => boolean> = {
+    email: () => siteConfig.contactEmail.trim() === '',
+    phone: () => siteConfig.phone.display.trim() === '' && siteConfig.phone.tel.trim() === '',
+    address: () => siteConfig.addresses.length === 0,
+    ein: () => siteConfig.ein.trim() === '',
+    guidestar: () =>
+      siteConfig.guidestar.profileUrl.trim() === '' &&
+      siteConfig.guidestar.directProfileUrl.trim() === '',
+    social: () => siteConfig.social.every((s) => s.href.trim() === ''),
+    team: () => team.length === 0,
+    donationUrl: () => siteConfig.donationUrl.trim() === '',
+    volunteerUrl: () => siteConfig.volunteerUrl.trim() === '',
+  }
+  const pending = siteConfig.pending ?? []
+
+  it('lists only known fields, each once', () => {
+    for (const field of pending) expect(Object.keys(isEmpty)).toContain(field)
+    expect(new Set(pending).size).toBe(pending.length)
+  })
+
+  it.each(pending.map((field) => [field]))('pending %s has an empty value', (field) => {
+    expect(isEmpty[field as PendingField]()).toBe(true)
   })
 })
 

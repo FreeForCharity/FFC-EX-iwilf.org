@@ -42,6 +42,32 @@ export type SiteAddress = {
   mapUrl: string
 }
 
+/**
+ * A footer-standard field the charity has not supplied yet. Listing a field in
+ * `siteConfig.pending` renders a visible "awaiting information" placeholder in
+ * its place (plain text, never a link), so a gap in the FFC footer standard is
+ * a call to action on the page rather than a silent omission. The field's own
+ * value must stay empty while it is pending, so no placeholder or borrowed
+ * value (e.g. the template's Free For Charity details) can ship behind it.
+ *
+ * An empty value that is NOT listed here keeps its plain meaning: the charity
+ * has none (e.g. no public phone). `taxStatusLabel` is deliberately not a
+ * pending field: it is a legal claim, and '' means "make no claim".
+ */
+export type PendingField =
+  | 'email'
+  | 'phone'
+  | 'address'
+  | 'ein'
+  | 'guidestar'
+  | 'social'
+  | 'team'
+  | 'donationUrl'
+  | 'volunteerUrl'
+
+/** Visible text shown in place of a pending field. */
+export const PENDING_TEXT = 'Awaiting information from the charity'
+
 export type SiteConfig = {
   /** Display name of the charity (used in titles, OG/Twitter cards). */
   name: string
@@ -150,6 +176,8 @@ export type SiteConfig = {
    * nonprofit. Omit for a standalone charity (the footer clause is hidden).
    */
   parentOrg?: { name: string; url: string; hubUrl: string }
+  /** Footer-standard fields still awaiting the charity. See `PendingField`. */
+  pending?: readonly PendingField[]
 }
 
 export const siteConfig: SiteConfig = {
@@ -158,7 +186,8 @@ export const siteConfig: SiteConfig = {
   mission:
     'Preserving, documenting, and honoring the history and legacy of the interpreters who served alongside U.S. and Coalition forces during Operation Iraqi Freedom.',
   // Empty = the footer's Donate / Volunteer links email contactEmail instead.
-  // The charity is still building both pages (FFC-EX-iwilf.org#5).
+  // The charity is still building both pages (FFC-EX-iwilf.org#5), so both
+  // are listed in `pending` below.
   donationUrl: '',
   volunteerUrl: '',
   description:
@@ -187,7 +216,7 @@ export const siteConfig: SiteConfig = {
     },
   ],
   ein: '42-4096124',
-  // No public phone number (FFC-EX-iwilf.org#5); empty hides the footer row.
+  // No public phone yet (FFC-EX-iwilf.org#5: may add Google Voice later).
   phone: { display: '', tel: '' },
   addresses: [
     {
@@ -198,7 +227,7 @@ export const siteConfig: SiteConfig = {
   ],
   // IRS 501(c)(3) recognition is still pending, so no tax-status claim.
   taxStatusLabel: '',
-  // No GuideStar / Candid profile yet; empty hides the footer seal.
+  // No GuideStar / Candid profile yet (listed in `pending`).
   guidestar: {
     profileUrl: '',
     directProfileUrl: '',
@@ -208,6 +237,9 @@ export const siteConfig: SiteConfig = {
     url: 'https://freeforcharity.org',
     hubUrl: 'https://freeforcharity.org/hub/',
   },
+  // Still to come from the charity (FFC-EX-iwilf.org#5). Each renders as a
+  // visible "awaiting information" placeholder until it is filled in.
+  pending: ['phone', 'guidestar', 'donationUrl', 'volunteerUrl'],
   // parentOrg is intentionally unset: this template is for standalone
   // charities by default. Set it only for a genuine "a project of"
   // fiscal-sponsorship relationship.
@@ -351,6 +383,11 @@ function linkOrEmail(url: string, subject: string): string {
 }
 
 /** Footer Donate link: `donationUrl`, else an email to the charity. */
+/** True when `field` is listed in `siteConfig.pending`. */
+export function isPending(field: PendingField): boolean {
+  return siteConfig.pending?.includes(field) ?? false
+}
+
 export function donateHref(): string {
   return linkOrEmail(siteConfig.donationUrl, `Donating to ${siteConfig.name}`)
 }

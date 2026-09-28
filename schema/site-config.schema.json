@@ -88,6 +88,11 @@
         "hubUrl": { "type": "string", "minLength": 1 }
       }
     },
+    "pending": {
+      "type": "array",
+      "description": "Footer-standard fields still awaiting the charity; each renders a visible placeholder and must have an empty value.",
+      "items": { "type": "string" }
+    },
     "parentOrg": {
       "type": "object",
       "additionalProperties": true,
