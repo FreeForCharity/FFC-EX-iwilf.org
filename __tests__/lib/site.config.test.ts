@@ -67,8 +67,10 @@ describe('siteConfig contract', () => {
     // Converged shape: these keys must match the FFC Single Page template's
     // canonical SiteConfig (guidestar.profileUrl / directProfileUrl,
     // phone.display / phone.tel, addresses[].mapUrl, supportedBy.hubUrl).
-    expect(siteConfig.guidestar.profileUrl).toMatch(/^https:\/\//)
-    expect(siteConfig.guidestar.directProfileUrl).toMatch(/^https:\/\//)
+    // Both empty = no GuideStar profile yet (the footer hides the seal).
+    for (const url of [siteConfig.guidestar.profileUrl, siteConfig.guidestar.directProfileUrl]) {
+      expect(url).toMatch(/^(https:\/\/.+)?$/)
+    }
 
     // IRS EIN format: two digits, hyphen, seven digits.
     expect(siteConfig.ein).toMatch(/^\d{2}-\d{7}$/)

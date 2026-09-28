@@ -47,7 +47,21 @@ describe('Footer component', () => {
     expect(screen.getByText(new RegExp(currentYear.toString()))).toBeInTheDocument()
   })
 
-  it('should have GuideStar profile link', () => {
+  const hasGuidestar = Boolean(
+    siteConfig.guidestar.profileUrl.trim() && siteConfig.guidestar.directProfileUrl.trim()
+  )
+
+  it('shows the GuideStar seal only when a GuideStar profile is configured', () => {
+    render(<Footer />)
+    expect(Boolean(screen.queryByAltText('GuideStar Platinum Seal of Transparency'))).toBe(
+      hasGuidestar
+    )
+    expect(Boolean(screen.queryByText('Direct GuideStar Profile Link'))).toBe(hasGuidestar)
+  })
+
+  const itWithGuidestar = hasGuidestar ? it : it.skip
+
+  itWithGuidestar('should have GuideStar profile link', () => {
     render(<Footer />)
     expect(screen.getByLabelText(`View ${siteConfig.name} GuideStar Profile`)).toHaveAttribute(
       'href',
@@ -333,7 +347,7 @@ describe('Footer component', () => {
     expect(hubLink).toHaveAttribute('rel', 'noopener noreferrer')
   })
 
-  it('should have GuideStar image with alt text', () => {
+  itWithGuidestar('should have GuideStar image with alt text', () => {
     render(<Footer />)
     expect(screen.getByAltText('GuideStar Platinum Seal of Transparency')).toBeInTheDocument()
   })

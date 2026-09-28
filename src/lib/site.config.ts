@@ -153,59 +153,55 @@ export type SiteConfig = {
 }
 
 export const siteConfig: SiteConfig = {
-  name: 'Free For Charity',
-  tagline: 'Reduce Costs, Increase Impact',
+  name: 'Iraq War Interpreters Legacy Foundation',
+  tagline: 'Honoring the Interpreters of Operation Iraqi Freedom',
   mission:
-    'Free For Charity connects students, professionals, and businesses with nonprofits to reduce costs and increase revenues.',
+    'Preserving, documenting, and honoring the history and legacy of the interpreters who served alongside U.S. and Coalition forces during Operation Iraqi Freedom.',
   // Empty = the footer's Donate / Volunteer links email contactEmail instead.
+  // The charity is still building both pages (FFC-EX-iwilf.org#5).
   donationUrl: '',
   volunteerUrl: '',
   description:
-    'Free For Charity connects students, professionals, and businesses with nonprofits to reduce costs and increase revenues—putting more resources back into their missions.',
+    'The Iraq War Interpreters Legacy Foundation preserves, documents, and honors the history and legacy of the interpreters who served alongside U.S. and Coalition forces during Operation Iraqi Freedom.',
   shortDescription:
-    'Connecting students, professionals, and businesses with nonprofits to reduce costs and increase revenues.',
-  url: 'https://ffcworkingsite1.org',
-  twitterHandle: '@freeforcharity',
-  contactEmail: 'clarkemoyer@freeforcharity.org',
+    'Preserving and honoring the legacy of the interpreters who served alongside U.S. and Coalition forces in Iraq.',
+  // No custom domain yet (public/CNAME absent), so the site is served from
+  // the GitHub Pages project URL. Switch to https://iwilf.org at DNS cutover.
+  url: 'https://freeforcharity.github.io',
+  twitterHandle: '',
+  contactEmail: 'iwilf@protonmail.com',
   keywords: [
+    'Iraq War interpreters',
+    'Operation Iraqi Freedom',
+    'interpreters',
+    'veterans',
+    'oral history',
     'nonprofit',
-    'charity',
-    'volunteer',
-    'donate',
-    'free hosting',
-    'domains',
-    'Microsoft 365',
   ],
   themeColor: '#ffffff',
   vulnerabilityDisclosurePath: '/vulnerability-disclosure-policy',
   social: [
-    { label: 'Facebook', href: 'https://www.facebook.com/freeforcharity' },
-    { label: 'X (Twitter)', href: 'https://x.com/freeforcharity1' },
-    { label: 'LinkedIn', href: 'https://www.linkedin.com/company/freeforcharity/' },
-    // Repo name uses underscores — the hyphenated variant 404s.
-    { label: 'GitHub', href: 'https://github.com/FreeForCharity/FFC-IN-Footer_Only_Template' },
+    {
+      label: 'LinkedIn',
+      href: 'https://www.linkedin.com/company/iraq-war-interpreters-legacy-foundation/',
+    },
   ],
-  ein: '46-2471893',
-  phone: { display: '(520) 222-8104', tel: '5202228104' },
+  ein: '42-4096124',
+  // No public phone number (FFC-EX-iwilf.org#5); empty hides the footer row.
+  phone: { display: '', tel: '' },
   addresses: [
     {
-      label: 'Main Address',
-      lines: ['4030 Wake Forrest Road', 'Suite 349 Raleigh North', 'Carolina 27609'],
-      mapUrl:
-        'https://www.google.com/maps/search/?api=1&query=4030+Wake+Forrest+Road+Suite+349+Raleigh+NC+27609',
-    },
-    {
-      label: 'PA Office Address',
-      lines: ['301 Science Park Road Suite', '119 State College PA 16803'],
-      mapUrl:
-        'https://www.google.com/maps/place/Free+For+Charity/@40.7768455,-77.8963305,17z/data=!3m1!4b1!4m6!3m5!1s0x89cea944b44a2e01:0x6fc2d6bf09e00a0f!8m2!3d40.7768415!4d-77.8937556!16s%2Fg%2F11vzvbl2d7?entry=ttu&g_ep=EgoyMDI1MTEyMy4xIKXMDSoASAFQAw%3D%3D',
+      label: 'Location',
+      lines: ['St. Petersburg, FL'],
+      mapUrl: 'https://www.google.com/maps/search/?api=1&query=St.+Petersburg+FL',
     },
   ],
-  taxStatusLabel: 'a US 501c3 Non Profit',
+  // IRS 501(c)(3) recognition is still pending, so no tax-status claim.
+  taxStatusLabel: '',
+  // No GuideStar / Candid profile yet; empty hides the footer seal.
   guidestar: {
-    profileUrl: 'https://www.guidestar.org/profile/46-2471893',
-    directProfileUrl:
-      'https://www.guidestar.org/profile/shared/bbbe173a-87b9-4af9-a8a2-cae255a95742',
+    profileUrl: '',
+    directProfileUrl: '',
   },
   supportedBy: {
     name: 'Free For Charity',

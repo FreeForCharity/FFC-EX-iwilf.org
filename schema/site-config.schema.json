@@ -56,8 +56,14 @@
       "additionalProperties": true,
       "required": ["profileUrl", "directProfileUrl"],
       "properties": {
-        "profileUrl": { "type": "string", "minLength": 1 },
-        "directProfileUrl": { "type": "string", "minLength": 1 }
+        "profileUrl": {
+          "type": "string",
+          "description": "Empty string = no GuideStar profile yet; the footer hides the seal."
+        },
+        "directProfileUrl": {
+          "type": "string",
+          "description": "Empty string = no GuideStar profile yet; the footer hides the seal."
+        }
       }
     },
     "social": {
