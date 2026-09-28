@@ -69,7 +69,7 @@ describe('siteConfig contract', () => {
     // phone.display / phone.tel, addresses[].mapUrl, supportedBy.hubUrl).
     // Both empty = no GuideStar profile yet (the footer hides the seal).
     for (const url of [siteConfig.guidestar.profileUrl, siteConfig.guidestar.directProfileUrl]) {
-      expect(url).toMatch(/^(https:\/\/.+)?$/)
+      expect(url).toMatch(/^(https:\/\/\S+)?$/)
     }
 
     // IRS EIN format: two digits, hyphen, seven digits.
