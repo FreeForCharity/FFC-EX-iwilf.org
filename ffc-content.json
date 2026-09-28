@@ -1,0 +1,31 @@
+{
+  "domain": "iwilf.org",
+  "charityName": "Iraq War Interpreters Legacy Foundation",
+  "websiteSituation": "New charity domain name and new charity website",
+  "currentWebsiteUrl": "",
+  "domainRegistrar": "No domain yet",
+  "requesterGitHubUsername": "clarkemoyer",
+  "technicalPocGitHubUsername": "Iwilf2026",
+  "cloudflareZoneControlled": false,
+  "footer": {
+    "email": "",
+    "phone": "",
+    "address": "",
+    "ein": "42-4096124",
+    "irsStatus": "Not yet / pending (pre-501(c)(3))",
+    "guideStarProfileUrl": "",
+    "guideStarDirectProfileUrl": "",
+    "socialLinks": [
+      "linkedin: https://www.linkedin.com/company/iraq-war-interpreters-legacy-foundation/"
+    ],
+    "mission": "Preserving, documenting, and honoring the history and legacy of the interpreters who served alongside U.S. and Coalition forces during Operation Iraqi Freedom.",
+    "donationUrl": "",
+    "volunteerUrl": ""
+  },
+  "leadership": [
+    "Ali Almrayatee | Founder | https://www.linkedin.com/in/ali-almrayatee",
+    "Samer Matroud | Treasurer |",
+    "Adnan Kadhim | Volunteer Coordinator |"
+  ],
+  "generatedUtc": "2026-09-28T18:30:04.0091115Z"
+}
