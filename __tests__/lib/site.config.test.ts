@@ -67,8 +67,12 @@ describe('siteConfig contract', () => {
     // Converged shape: these keys must match the FFC Single Page template's
     // canonical SiteConfig (guidestar.profileUrl / directProfileUrl,
     // phone.display / phone.tel, addresses[].mapUrl, supportedBy.hubUrl).
-    expect(siteConfig.guidestar.profileUrl).toMatch(/^https:\/\//)
-    expect(siteConfig.guidestar.directProfileUrl).toMatch(/^https:\/\//)
+    // Empty means "no GuideStar / Candid profile yet" (e.g. a pre-501(c)(3)
+    // charity) and the footer then hides the seal and links; anything else
+    // must be a real https URL.
+    for (const url of [siteConfig.guidestar.profileUrl, siteConfig.guidestar.directProfileUrl]) {
+      if (url !== '') expect(url).toMatch(/^https:\/\//)
+    }
 
     // IRS EIN format: two digits, hyphen, seven digits.
     expect(siteConfig.ein).toMatch(/^\d{2}-\d{7}$/)
@@ -76,7 +80,10 @@ describe('siteConfig contract', () => {
     expect(typeof siteConfig.phone.display).toBe('string')
     expect(typeof siteConfig.phone.tel).toBe('string')
 
-    expect(siteConfig.addresses.length).toBeGreaterThan(0)
+    // An empty list is allowed (the shared schema permits it): a charity with
+    // no public mailing address publishes none, and the footer renders none.
+    // Every address that IS listed must be complete.
+    expect(Array.isArray(siteConfig.addresses)).toBe(true)
     for (const address of siteConfig.addresses) {
       expect(address.label.trim().length).toBeGreaterThan(0)
       expect(address.lines.length).toBeGreaterThan(0)

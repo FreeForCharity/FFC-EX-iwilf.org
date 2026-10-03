@@ -29,7 +29,15 @@ async function waitForDataLayer(page: import('@playwright/test').Page) {
   )
 }
 
+// An empty GTM_ID is a supported state (no container provisioned yet; see
+// src/lib/analytics.config.ts), in which the GTM components render nothing.
+// These specs exercise a configured container, so they skip until one exists,
+// as tests/test.config.ts documents.
+const GTM_SKIP_REASON = 'No GTM container provisioned yet (GTM_ID is empty).'
+
 test.describe('Google Tag Manager Integration', () => {
+  test.skip(!testConfig.googleTagManager.configured, GTM_SKIP_REASON)
+
   test('should initialize dataLayer on page load', async ({ page }) => {
     await page.goto('/')
     await waitForDataLayer(page)
@@ -170,6 +178,8 @@ test.describe('Google Tag Manager Integration', () => {
 })
 
 test.describe('Google Tag Manager Configuration', () => {
+  test.skip(!testConfig.googleTagManager.configured, GTM_SKIP_REASON)
+
   test('should load GTM script with configured ID', async ({ page }) => {
     await page.goto('/')
     await waitForGtmScript(page)

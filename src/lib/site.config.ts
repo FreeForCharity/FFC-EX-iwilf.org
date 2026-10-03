@@ -1,5 +1,5 @@
 /**
- * Central site configuration for Free For Charity template sites.
+ * Central site configuration for FFC template sites.
  *
  * EDIT THIS FILE to customize a new FFC-supported nonprofit site.
  * Most values that vary between sites flow from here so pages, metadata,
@@ -116,7 +116,7 @@ export type SiteConfig = {
   vulnerabilityDisclosurePath: string
   /** Social links displayed in the footer. */
   social: readonly SiteSocialLink[]
-  /** IRS Employer Identification Number (tax ID), e.g. '46-2471893'. */
+  /** IRS Employer Identification Number (tax ID), e.g. '12-3456789'. */
   ein: string
   /**
    * Primary phone number. `display` is the human-readable form shown to users;
@@ -153,59 +153,49 @@ export type SiteConfig = {
 }
 
 export const siteConfig: SiteConfig = {
-  name: 'Free For Charity',
-  tagline: 'Reduce Costs, Increase Impact',
+  name: 'Iraq War Interpreters Legacy Foundation',
+  tagline: 'Honoring the Interpreters of Operation Iraqi Freedom',
   mission:
-    'Free For Charity connects students, professionals, and businesses with nonprofits to reduce costs and increase revenues.',
+    'Preserving, documenting, and honoring the history and legacy of the interpreters who served alongside U.S. and Coalition forces during Operation Iraqi Freedom.',
   // Empty = the footer's Donate / Volunteer links email contactEmail instead.
   donationUrl: '',
   volunteerUrl: '',
   description:
-    'Free For Charity connects students, professionals, and businesses with nonprofits to reduce costs and increase revenues—putting more resources back into their missions.',
+    'The Iraq War Interpreters Legacy Foundation preserves, documents, studies, and honors the history and legacy of the interpreters who served alongside United States and Coalition forces during Operation Iraqi Freedom, through historical preservation, oral histories, archival development, scholarly research, and education.',
   shortDescription:
-    'Connecting students, professionals, and businesses with nonprofits to reduce costs and increase revenues.',
-  url: 'https://ffcworkingsite1.org',
-  twitterHandle: '@freeforcharity',
-  contactEmail: 'clarkemoyer@freeforcharity.org',
+    'Preserving and honoring the legacy of the interpreters who served alongside U.S. and Coalition forces in Operation Iraqi Freedom.',
+  // No public/CNAME yet: the site is served from the GitHub Pages project URL.
+  // Switch to https://iwilf.org in the same change that adds public/CNAME.
+  url: 'https://freeforcharity.github.io',
+  twitterHandle: '',
+  contactEmail: 'iwilf@proton.me',
   keywords: [
+    'Iraq War interpreters',
+    'Operation Iraqi Freedom',
+    'oral history',
+    'military history',
+    'veterans',
     'nonprofit',
-    'charity',
-    'volunteer',
-    'donate',
-    'free hosting',
-    'domains',
-    'Microsoft 365',
   ],
   themeColor: '#ffffff',
   vulnerabilityDisclosurePath: '/vulnerability-disclosure-policy',
   social: [
-    { label: 'Facebook', href: 'https://www.facebook.com/freeforcharity' },
-    { label: 'X (Twitter)', href: 'https://x.com/freeforcharity1' },
-    { label: 'LinkedIn', href: 'https://www.linkedin.com/company/freeforcharity/' },
-    // Repo name uses underscores — the hyphenated variant 404s.
-    { label: 'GitHub', href: 'https://github.com/FreeForCharity/FFC-IN-Footer_Only_Template' },
-  ],
-  ein: '46-2471893',
-  phone: { display: '(520) 222-8104', tel: '5202228104' },
-  addresses: [
     {
-      label: 'Main Address',
-      lines: ['4030 Wake Forrest Road', 'Suite 349 Raleigh North', 'Carolina 27609'],
-      mapUrl:
-        'https://www.google.com/maps/search/?api=1&query=4030+Wake+Forrest+Road+Suite+349+Raleigh+NC+27609',
-    },
-    {
-      label: 'PA Office Address',
-      lines: ['301 Science Park Road Suite', '119 State College PA 16803'],
-      mapUrl:
-        'https://www.google.com/maps/place/Free+For+Charity/@40.7768455,-77.8963305,17z/data=!3m1!4b1!4m6!3m5!1s0x89cea944b44a2e01:0x6fc2d6bf09e00a0f!8m2!3d40.7768415!4d-77.8937556!16s%2Fg%2F11vzvbl2d7?entry=ttu&g_ep=EgoyMDI1MTEyMy4xIKXMDSoASAFQAw%3D%3D',
+      label: 'LinkedIn',
+      href: 'https://www.linkedin.com/company/iraq-war-interpreters-legacy-foundation/',
     },
   ],
-  taxStatusLabel: 'a US 501c3 Non Profit',
+  ein: '42-4096124',
+  phone: { display: '(813) 608-6820', tel: '8136086820' },
+  // No public mailing address yet; the footer renders none while this is empty.
+  addresses: [],
+  // Pre-501(c)(3): no IRS determination yet, so the footer and donation policy
+  // must not claim 501(c)(3) status or tax-deductibility.
+  taxStatusLabel: '',
+  // No GuideStar / Candid profile yet; the footer hides the seal and links.
   guidestar: {
-    profileUrl: 'https://www.guidestar.org/profile/46-2471893',
-    directProfileUrl:
-      'https://www.guidestar.org/profile/shared/bbbe173a-87b9-4af9-a8a2-cae255a95742',
+    profileUrl: '',
+    directProfileUrl: '',
   },
   supportedBy: {
     name: 'Free For Charity',
@@ -328,7 +318,7 @@ export function cardDescription(): string {
 
 /**
  * `mailto:` link to `contactEmail`, optionally with a subject. Every mailto
- * built from `siteConfig.contactEmail` goes through here (the Free For Charity
+ * built from `siteConfig.contactEmail` goes through here (the FFC
  * donation policy page links FFC's own address directly, by design). The
  * characters that would end or corrupt the address part of a mailto: URI
  * (RFC 6068) are percent-encoded -- `?` and `#` end it, `&` and `%` corrupt
