@@ -10,9 +10,9 @@ import { donateUrl, navLinks, orgName } from '@/data/landing'
 const SiteHeader = () => {
   return (
     <header className="bg-iwilf-navy text-white">
-      {/* Small screens: seal and Donate on one row, links below. lg+: three columns
-          (seal | links centred | Donate), as in the design concept. */}
-      <div className="mx-auto flex max-w-[1248px] flex-wrap items-center justify-between gap-x-3 gap-y-2 md:gap-x-6 px-4 py-3 lg:grid lg:grid-cols-[1fr_auto_1fr] md:px-8">
+      {/* Seal and Donate on the top row, section links centred on a row
+          below, as in the design concept. */}
+      <div className="mx-auto flex max-w-[1248px] flex-wrap items-center justify-between gap-x-3 gap-y-2 md:gap-x-6 px-4 py-3 md:px-8">
         <Link
           href="/"
           className="flex min-h-[44px] items-center gap-2 rounded md:gap-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-iwilf-bronze-light"
@@ -29,7 +29,7 @@ const SiteHeader = () => {
           </span>
         </Link>
 
-        <nav aria-label="Main" className="order-last w-full lg:order-none lg:w-auto">
+        <nav aria-label="Main" className="order-last w-full">
           <ul className="flex items-center justify-center gap-1 md:gap-6">
             {navLinks.map((link) => (
               <li key={link.href}>
@@ -48,7 +48,7 @@ const SiteHeader = () => {
           href={donateUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex min-h-[44px] items-center justify-self-end rounded bg-iwilf-bronze-dark px-4 md:px-5 font-sans text-base font-bold uppercase tracking-wide text-white hover:bg-iwilf-bronze focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+          className="inline-flex min-h-[44px] items-center rounded bg-iwilf-bronze-dark px-4 md:px-5 font-sans text-base font-bold uppercase tracking-wide text-white hover:bg-iwilf-bronze focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
         >
           Donate
           <span className="sr-only"> (opens in a new tab)</span>
