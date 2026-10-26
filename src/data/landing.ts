@@ -39,9 +39,10 @@ export const hero = {
 
 export const mission = {
   heading: 'Our Mission',
+  // Ali's official mission statement, word for word. Don't edit without his OK.
   statements: [
-    'To preserve the untold stories of Iraqi interpreters who stood shoulder to shoulder with coalition forces.',
-    'To honor their courage. To inform the future.',
+    'The Iraq War Interpreters Legacy Foundation preserves, documents, researches, interprets, and advances public understanding of the service, sacrifice, professionalism, and enduring legacy of the interpreters, translators, cultural advisors, and other language professionals who served alongside the United States and Coalition Forces during Operation Iraqi Freedom (2003–2011).',
+    'The Foundation fulfills this mission through historical preservation, scholarly research, public education, recognition of distinguished service, institutional collaboration, and responsible stewardship of historical resources. By collecting and preserving primary historical sources, supporting evidence-based scholarship, promoting educational initiatives, and recognizing individual and collective contributions, the Foundation seeks to ensure that this important history remains permanently accessible for the benefit of present and future generations.',
   ],
   pillars: [
     { title: 'Preserve', description: 'Oral histories, documents, photos, and interviews.' },

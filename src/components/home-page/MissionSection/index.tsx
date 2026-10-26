@@ -15,8 +15,10 @@ const icons: Record<string, LucideIcon> = {
 const MissionSection = () => {
   return (
     <section id="mission" aria-labelledby="mission-heading" className="bg-iwilf-warm-white">
-      <div className="mx-auto grid max-w-[1248px] gap-12 px-4 py-16 md:px-8 lg:grid-cols-[1fr_2fr] lg:py-24">
-        <div>
+      {/* Statement above the pillars: Ali's full mission text is too long for
+          a side column. */}
+      <div className="mx-auto grid max-w-[1248px] gap-12 px-4 py-16 md:px-8 lg:py-24">
+        <div className="max-w-3xl">
           <h2 id="mission-heading" className="text-3xl text-iwilf-navy md:text-4xl">
             {mission.heading}
           </h2>
