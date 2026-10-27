@@ -16,7 +16,7 @@ const Hero = () => {
           <div className="mt-8 flex flex-col gap-4 sm:flex-row">
             <a
               href="#mission"
-              className="inline-flex min-h-[44px] items-center justify-center rounded bg-iwilf-bronze-dark px-6 font-sans text-base font-bold uppercase tracking-wide text-white hover:bg-iwilf-bronze focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+              className="inline-flex min-h-[44px] items-center justify-center rounded bg-iwilf-bronze-dark px-6 font-sans text-base font-bold uppercase tracking-wide text-white hover:bg-iwilf-bronze-light hover:text-iwilf-navy focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
             >
               Our Mission
             </a>

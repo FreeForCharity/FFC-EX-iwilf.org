@@ -48,7 +48,7 @@ const SiteHeader = () => {
           href={donateUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex min-h-[44px] items-center rounded bg-iwilf-bronze-dark px-4 md:px-5 font-sans text-base font-bold uppercase tracking-wide text-white hover:bg-iwilf-bronze focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+          className="inline-flex min-h-[44px] items-center rounded bg-iwilf-bronze-dark px-4 md:px-5 font-sans text-base font-bold uppercase tracking-wide text-white hover:bg-iwilf-bronze-light hover:text-iwilf-navy focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
         >
           Donate
           <span className="sr-only"> (opens in a new tab)</span>
