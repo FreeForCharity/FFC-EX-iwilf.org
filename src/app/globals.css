@@ -9,6 +9,19 @@
   --ffc-black: #000000;
   --ffc-white: #ffffff;
 
+  /*
+   * IWILF palette (design concept, issue #5). bronze-dark carries white text
+   * at 5.4:1 and bronze-light sits on navy at 6.1:1; plain bronze is for
+   * icons and accents only (3.8:1 against white).
+   */
+  --iwilf-navy: #1b345a;
+  --iwilf-bronze: #a67c39;
+  --iwilf-bronze-dark: #8a6328;
+  --iwilf-bronze-light: #d4b07a;
+  --iwilf-warm-white: #f8f7f4;
+  --iwilf-stone: #eee3dd;
+  --iwilf-charcoal: #2e3135;
+
   /* Layout */
   --ffc-container: 1248px;
   --ffc-radius-xl: 20px;
@@ -26,6 +39,13 @@ body {
   --color-yellow: var(--ffc-yellow);
   --color-ink: var(--ffc-black);
   --color-paper: var(--ffc-white);
+  --color-iwilf-navy: var(--iwilf-navy);
+  --color-iwilf-bronze: var(--iwilf-bronze);
+  --color-iwilf-bronze-dark: var(--iwilf-bronze-dark);
+  --color-iwilf-bronze-light: var(--iwilf-bronze-light);
+  --color-iwilf-warm-white: var(--iwilf-warm-white);
+  --color-iwilf-stone: var(--iwilf-stone);
+  --color-iwilf-charcoal: var(--iwilf-charcoal);
 
   --radius-xl: var(--ffc-radius-xl);
   --container: var(--ffc-container);
