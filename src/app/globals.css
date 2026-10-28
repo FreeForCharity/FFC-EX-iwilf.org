@@ -54,6 +54,10 @@ body {
   --font-serif-display: var(--font-faustina);
   --font-serif: var(--font-fauna-one);
   --font-sans: var(--font-lato);
+  /* IWILF concept fonts (src/lib/fonts.ts): font-iwilf-serif / -sans / -arabic */
+  --font-iwilf-serif: var(--font-source-serif-4);
+  --font-iwilf-sans: var(--font-inter);
+  --font-iwilf-arabic: var(--font-noto-naskh-arabic);
 }
 
 body {

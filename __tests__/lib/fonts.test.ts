@@ -55,6 +55,21 @@ const expectedFonts: Array<{
     weights: ['400', '500', '600', '700'],
     sources: ['400 900'],
   },
+  // IWILF design-concept fonts (issue #5). `weights` are the ones the IWILF
+  // sections use.
+  {
+    name: 'sourceSerif4',
+    variable: '--font-source-serif-4',
+    weights: ['400', '600', '700'],
+    sources: ['200 900'],
+  },
+  { name: 'inter', variable: '--font-inter', weights: ['400', '700'], sources: ['100 900'] },
+  {
+    name: 'notoNaskhArabic',
+    variable: '--font-noto-naskh-arabic',
+    weights: ['400', '700'],
+    sources: ['400 700'],
+  },
 ]
 
 /** True when a declared `weight` ('400' or '300 800') covers weight `w`. */

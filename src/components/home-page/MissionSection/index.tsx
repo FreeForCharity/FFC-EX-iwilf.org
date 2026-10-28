@@ -19,13 +19,16 @@ const MissionSection = () => {
           a side column. */}
       <div className="mx-auto grid max-w-[1248px] gap-12 px-4 py-16 md:px-8 lg:py-24">
         <div className="max-w-3xl">
-          <h2 id="mission-heading" className="text-3xl text-iwilf-navy md:text-4xl">
+          <h2
+            id="mission-heading"
+            className="font-iwilf-serif text-3xl text-iwilf-navy md:text-4xl"
+          >
             {mission.heading}
           </h2>
           {mission.statements.map((statement) => (
             <p
               key={statement}
-              className="mt-4 font-sans text-lg leading-relaxed text-iwilf-charcoal"
+              className="mt-4 font-iwilf-sans text-lg leading-relaxed text-iwilf-charcoal"
             >
               {statement}
             </p>
@@ -37,10 +40,10 @@ const MissionSection = () => {
             return (
               <li key={pillar.title}>
                 <Icon aria-hidden="true" className="h-8 w-8 text-iwilf-bronze" strokeWidth={1.75} />
-                <h3 className="mt-3 font-sans text-base font-bold uppercase tracking-wide text-iwilf-navy">
+                <h3 className="mt-3 font-iwilf-sans text-base font-bold uppercase tracking-wide text-iwilf-navy">
                   {pillar.title}
                 </h3>
-                <p className="mt-1 font-sans text-base leading-relaxed text-iwilf-charcoal">
+                <p className="mt-1 font-iwilf-sans text-base leading-relaxed text-iwilf-charcoal">
                   {pillar.description}
                 </p>
               </li>
