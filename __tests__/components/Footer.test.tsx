@@ -4,7 +4,7 @@ import { axe, toHaveNoViolations } from 'jest-axe'
 import Footer from '../../src/components/footer'
 import RootPage from '../../src/app/page'
 import { routes } from '../../src/app/sitemap'
-import { siteConfig } from '../../src/lib/site.config'
+import { PENDING_TEXT, isPending, siteConfig } from '../../src/lib/site.config'
 
 // Extend Jest matchers
 expect.extend(toHaveNoViolations)
@@ -47,7 +47,31 @@ describe('Footer component', () => {
     expect(screen.getByText(new RegExp(currentYear.toString()))).toBeInTheDocument()
   })
 
-  it('should have GuideStar profile link', () => {
+  it('renders a visible, non-link placeholder for each pending footer field', () => {
+    render(<Footer />)
+    const footerFields = (siteConfig.pending ?? []).filter((f) => f !== 'team')
+    const notes = screen.queryAllByText(PENDING_TEXT)
+    expect(notes).toHaveLength(footerFields.length)
+    for (const note of notes) expect(note.closest('a')).toBeNull()
+  })
+
+  it('shows a GuideStar placeholder only while guidestar is pending', () => {
+    render(<Footer />)
+    expect(Boolean(screen.queryByText('GuideStar / Candid Profile'))).toBe(isPending('guidestar'))
+  })
+
+  const hasSeal = Boolean(siteConfig.guidestar.profileUrl.trim())
+  const hasDirectLink = Boolean(siteConfig.guidestar.directProfileUrl.trim())
+
+  it('shows each GuideStar element only when its own URL is configured', () => {
+    render(<Footer />)
+    expect(Boolean(screen.queryByAltText('GuideStar Platinum Seal of Transparency'))).toBe(hasSeal)
+    expect(Boolean(screen.queryByText('Direct GuideStar Profile Link'))).toBe(hasDirectLink)
+  })
+
+  const itWithGuidestar = hasSeal && hasDirectLink ? it : it.skip
+
+  itWithGuidestar('should have GuideStar profile link', () => {
     render(<Footer />)
     expect(screen.getByLabelText(`View ${siteConfig.name} GuideStar Profile`)).toHaveAttribute(
       'href',
@@ -81,8 +105,24 @@ describe('Footer component', () => {
   // untested on every site that has a complete phone number.
   describe('the phone block', () => {
     const original = { ...siteConfig.phone }
+    const originalPending = siteConfig.pending
+    // These cases cover a phone that is NOT pending: empty means "no phone".
+    beforeEach(() => {
+      siteConfig.pending = (originalPending ?? []).filter((f) => f !== 'phone')
+    })
     afterEach(() => {
       siteConfig.phone = original
+      siteConfig.pending = originalPending
+    })
+
+    it('shows a non-dialable placeholder while the phone is pending', () => {
+      siteConfig.phone = { display: '', tel: '' }
+      siteConfig.pending = ['phone']
+      render(<Footer />)
+
+      expect(screen.getByText('Call Us Today')).toBeInTheDocument()
+      expect(screen.getByText(PENDING_TEXT).closest('a')).toBeNull()
+      expect(document.querySelector('a[href^="tel:"]')).toBeNull()
     })
 
     const absent = [
@@ -333,7 +373,7 @@ describe('Footer component', () => {
     expect(hubLink).toHaveAttribute('rel', 'noopener noreferrer')
   })
 
-  it('should have GuideStar image with alt text', () => {
+  itWithGuidestar('should have GuideStar image with alt text', () => {
     render(<Footer />)
     expect(screen.getByAltText('GuideStar Platinum Seal of Transparency')).toBeInTheDocument()
   })
