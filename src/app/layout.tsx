@@ -12,6 +12,9 @@ import {
   faunaOne,
   montserrat,
   cinzel,
+  sourceSerif4,
+  inter,
+  notoNaskhArabic,
 } from '@/lib/fonts'
 import { siteMetadata } from '@/lib/siteMetadata'
 import { CONSENT_MODE_BOOTSTRAP } from '@/lib/consent-mode'
@@ -74,6 +77,9 @@ export default function RootLayout({
           faunaOne.variable,
           montserrat.variable,
           cinzel.variable,
+          sourceSerif4.variable,
+          inter.variable,
+          notoNaskhArabic.variable,
         ].join(' ')}
         suppressHydrationWarning={true}
       >

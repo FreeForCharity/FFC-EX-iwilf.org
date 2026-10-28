@@ -124,3 +124,46 @@ export const cinzel = localFont({
   fallback: ['Georgia', 'Times New Roman', 'serif'],
   adjustFontFallback: 'Times New Roman',
 })
+
+// IWILF design-concept fonts (issue #5): Source Serif 4 for headings, Inter for
+// body text, Noto Naskh Arabic for the planned Arabic page. Same @fontsource
+// v5.3.0 variable builds as above, with LICENSE files under src/fonts/<family>/.
+export const sourceSerif4 = localFont({
+  src: [
+    {
+      path: '../fonts/source-serif-4/source-serif-4-latin-wght-normal.woff2',
+      weight: '200 900',
+      style: 'normal',
+    },
+  ],
+  display: 'swap',
+  variable: '--font-source-serif-4',
+  fallback: ['Georgia', 'Times New Roman', 'serif'],
+  adjustFontFallback: 'Times New Roman',
+})
+
+export const inter = localFont({
+  src: [
+    { path: '../fonts/inter/inter-latin-wght-normal.woff2', weight: '100 900', style: 'normal' },
+  ],
+  display: 'swap',
+  variable: '--font-inter',
+  fallback: ['Helvetica Neue', 'Arial', 'sans-serif'],
+  adjustFontFallback: 'Arial',
+})
+
+// Arabic subset only. Not preloaded: no page renders Arabic yet, so the browser
+// fetches this file only once an Arabic page uses it.
+export const notoNaskhArabic = localFont({
+  src: [
+    {
+      path: '../fonts/noto-naskh-arabic/noto-naskh-arabic-arabic-wght-normal.woff2',
+      weight: '400 700',
+      style: 'normal',
+    },
+  ],
+  display: 'swap',
+  preload: false,
+  variable: '--font-noto-naskh-arabic',
+  fallback: ['Tahoma', 'Arial', 'sans-serif'],
+})

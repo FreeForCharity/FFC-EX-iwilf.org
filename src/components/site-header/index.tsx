@@ -24,7 +24,7 @@ const SiteHeader = () => {
             height={56}
             className="h-10 w-10 md:h-14 md:w-14"
           />
-          <span className="max-w-[11.5rem] font-sans md:max-w-[14rem] text-sm font-bold uppercase leading-tight md:text-base md:tracking-wide">
+          <span className="max-w-[11.5rem] font-iwilf-sans md:max-w-[14rem] text-sm font-bold uppercase leading-tight md:text-base md:tracking-wide">
             {orgName}
           </span>
         </Link>
@@ -35,7 +35,7 @@ const SiteHeader = () => {
               <li key={link.href}>
                 <a
                   href={link.href}
-                  className="inline-flex min-h-[44px] items-center rounded px-2 font-sans text-base hover:text-iwilf-bronze-light focus:outline-none focus-visible:ring-2 focus-visible:ring-iwilf-bronze-light"
+                  className="inline-flex min-h-[44px] items-center rounded px-2 font-iwilf-sans text-base hover:text-iwilf-bronze-light focus:outline-none focus-visible:ring-2 focus-visible:ring-iwilf-bronze-light"
                 >
                   {link.label}
                 </a>
@@ -48,7 +48,7 @@ const SiteHeader = () => {
           href={donateUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex min-h-[44px] items-center rounded bg-iwilf-bronze-dark px-4 md:px-5 font-sans text-base font-bold uppercase tracking-wide text-white hover:bg-iwilf-bronze-light hover:text-iwilf-navy focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+          className="inline-flex min-h-[44px] items-center rounded bg-iwilf-bronze-dark px-4 md:px-5 font-iwilf-sans text-base font-bold uppercase tracking-wide text-white hover:bg-iwilf-bronze-light hover:text-iwilf-navy focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
         >
           Donate
           <span className="sr-only"> (opens in a new tab)</span>
