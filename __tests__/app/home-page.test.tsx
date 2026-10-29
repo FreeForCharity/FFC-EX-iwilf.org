@@ -21,14 +21,17 @@ jest.mock('../../src/components/ui/TeamMemberCard', () => {
 })
 
 import HomePage from '../../src/app/home-page'
+import { team } from '../../src/data/team'
 
 describe('HomePage (app/home-page)', () => {
   it('should render without crashing', () => {
     render(<HomePage />)
   })
 
-  it('should render TheFreeForCharityTeam component', () => {
+  it('should render one TheFreeForCharityTeam card per roster member', () => {
+    // The roster may be empty (IWILF asked for no names yet, issue #5); the
+    // Team section then renders nothing.
     render(<HomePage />)
-    expect(screen.getAllByTestId('team-member-card').length).toBeGreaterThan(0)
+    expect(screen.queryAllByTestId('team-member-card')).toHaveLength(team.length)
   })
 })

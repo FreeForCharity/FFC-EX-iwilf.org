@@ -47,16 +47,45 @@ describe('Footer component', () => {
     expect(screen.getByText(new RegExp(currentYear.toString()))).toBeInTheDocument()
   })
 
-  it('should have GuideStar profile link', () => {
-    render(<Footer />)
-    expect(screen.getByLabelText(`View ${siteConfig.name} GuideStar Profile`)).toHaveAttribute(
-      'href',
-      siteConfig.guidestar.profileUrl
-    )
-    expect(screen.getByText('Direct GuideStar Profile Link').closest('a')).toHaveAttribute(
-      'href',
-      siteConfig.guidestar.directProfileUrl
-    )
+  // The seal image names a GuideStar/Candid award, so it is a claim about the
+  // charity and must only render when a profile is configured. Both states are
+  // set explicitly rather than read from siteConfig, so neither depends on
+  // whether this fork happens to have a profile yet.
+  describe('the GuideStar block', () => {
+    const original = { ...siteConfig.guidestar }
+    afterEach(() => {
+      siteConfig.guidestar = original
+    })
+
+    it('renders the seal and both links when profiles are configured', () => {
+      siteConfig.guidestar = {
+        profileUrl: 'https://www.guidestar.org/profile/00-0000000',
+        directProfileUrl: 'https://www.guidestar.org/profile/shared/example',
+      }
+      render(<Footer />)
+      expect(screen.getByLabelText(`View ${siteConfig.name} GuideStar Profile`)).toHaveAttribute(
+        'href',
+        'https://www.guidestar.org/profile/00-0000000'
+      )
+      expect(screen.getByAltText('GuideStar Platinum Seal of Transparency')).toBeInTheDocument()
+      expect(screen.getByText('Direct GuideStar Profile Link').closest('a')).toHaveAttribute(
+        'href',
+        'https://www.guidestar.org/profile/shared/example'
+      )
+    })
+
+    it.each([
+      ['both empty', { profileUrl: '', directProfileUrl: '' }],
+      ['whitespace only', { profileUrl: '   ', directProfileUrl: '   ' }],
+    ] as const)('renders no seal and no links when %s', (_label, guidestar) => {
+      siteConfig.guidestar = { ...guidestar }
+      render(<Footer />)
+      expect(screen.queryByAltText('GuideStar Platinum Seal of Transparency')).toBeNull()
+      expect(screen.queryByLabelText(`View ${siteConfig.name} GuideStar Profile`)).toBeNull()
+      expect(screen.queryByText('Direct GuideStar Profile Link')).toBeNull()
+      // The EIN line in the same column still renders.
+      expect(screen.getByText(new RegExp(siteConfig.ein))).toBeInTheDocument()
+    })
   })
 
   it('should have email contact link', () => {
@@ -331,11 +360,6 @@ describe('Footer component', () => {
     expect(hubLink).toHaveAttribute('href', siteConfig.supportedBy.hubUrl)
     expect(hubLink).toHaveAttribute('target', '_blank')
     expect(hubLink).toHaveAttribute('rel', 'noopener noreferrer')
-  })
-
-  it('should have GuideStar image with alt text', () => {
-    render(<Footer />)
-    expect(screen.getByAltText('GuideStar Platinum Seal of Transparency')).toBeInTheDocument()
   })
 
   it('should have Google Maps links for addresses', () => {

@@ -3,32 +3,36 @@ import { team } from '../../src/data/team'
 describe('Team data integrity', () => {
   // The roster is per-charity content, so its SIZE and its NAMES are not
   // asserted -- a rebrand replaces both. What must hold for every fork is that
-  // the roster is non-empty (TheFreeForCharityTeam renders an empty-state
-  // otherwise, covered in that component's own suite) and well-formed.
-  it('should have at least one team member', () => {
-    expect(team.length).toBeGreaterThan(0)
+  // every member is well-formed. The roster may be empty -- TheFreeForCharityTeam
+  // then renders nothing (covered in that component's own suite); IWILF asked
+  // for no leadership names on the site yet (issue #5).
+  it('should export the roster as an array', () => {
+    expect(Array.isArray(team)).toBe(true)
   })
 
-  it.each(team)('team member "$name" should have required fields', (member) => {
-    expect(member.name).toBeDefined()
-    expect(typeof member.name).toBe('string')
-    expect(member.name.trim().length).toBeGreaterThan(0)
+  // A loop rather than it.each: it.each throws on an empty table.
+  for (const member of team) {
+    it(`team member "${member.name}" should have required fields`, () => {
+      expect(member.name).toBeDefined()
+      expect(typeof member.name).toBe('string')
+      expect(member.name.trim().length).toBeGreaterThan(0)
 
-    expect(member.role).toBeDefined()
-    expect(typeof member.role).toBe('string')
-    expect(member.role.trim().length).toBeGreaterThan(0)
+      expect(member.role).toBeDefined()
+      expect(typeof member.role).toBe('string')
+      expect(member.role.trim().length).toBeGreaterThan(0)
 
-    // Photos were removed in favor of initials monograms — no imageUrl field.
-    expect('imageUrl' in member).toBe(false)
+      // Photos were removed in favor of initials monograms — no imageUrl field.
+      expect('imageUrl' in member).toBe(false)
 
-    // linkedinUrl is optional; when set it must be an https:// URL on
-    // linkedin.com (or a subdomain) — the only shape TeamMemberCard turns into
-    // a link (safeLinkedInUrl). Enforcing the host here means bad data fails
-    // the suite instead of silently rendering as a non-link.
-    if (member.linkedinUrl !== undefined) {
-      expect(member.linkedinUrl).toMatch(/^https:\/\/([a-z0-9-]+\.)*linkedin\.com(\/|$)/i)
-    }
-  })
+      // linkedinUrl is optional; when set it must be an https:// URL on
+      // linkedin.com (or a subdomain) — the only shape TeamMemberCard turns into
+      // a link (safeLinkedInUrl). Enforcing the host here means bad data fails
+      // the suite instead of silently rendering as a non-link.
+      if (member.linkedinUrl !== undefined) {
+        expect(member.linkedinUrl).toMatch(/^https:\/\/([a-z0-9-]+\.)*linkedin\.com(\/|$)/i)
+      }
+    })
+  }
 
   it('should have no duplicate names', () => {
     const names = team.map((m) => m.name)
