@@ -56,8 +56,8 @@
       "additionalProperties": true,
       "required": ["profileUrl", "directProfileUrl"],
       "properties": {
-        "profileUrl": { "type": "string", "minLength": 1 },
-        "directProfileUrl": { "type": "string", "minLength": 1 }
+        "profileUrl": { "type": "string" },
+        "directProfileUrl": { "type": "string" }
       }
     },
     "social": {

@@ -5,6 +5,16 @@ import { render, screen } from '@testing-library/react'
 import TheFreeForCharityTeam from '../../src/components/home-page/TheFreeForCharityTeam'
 import { team } from '../../src/data/team'
 
+// The live roster may be empty (IWILF has asked for no names yet, issue #5),
+// so the populated-roster cases run against a fixture. The empty-roster case
+// below re-mocks the module with [].
+jest.mock('../../src/data/team', () => ({
+  team: [
+    { name: 'Sample Member', role: 'Founder' },
+    { name: 'Another Member', role: 'Treasurer' },
+  ],
+}))
+
 describe('TheFreeForCharityTeam component', () => {
   it('should render without crashing', () => {
     render(<TheFreeForCharityTeam />)
