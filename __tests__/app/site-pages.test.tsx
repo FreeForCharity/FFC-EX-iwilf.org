@@ -1,20 +1,22 @@
 import React from 'react'
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, within } from '@testing-library/react'
 import { axe, toHaveNoViolations } from 'jest-axe'
 
 import AboutUsPage from '../../src/app/about-us/page'
 import ArchivePage from '../../src/app/archive/page'
 import OralHistoriesPage from '../../src/app/oral-histories/page'
-import ArchiveSection from '../../src/components/site-pages/ArchiveSection'
+import ArchiveBrowser from '../../src/components/site-pages/ArchiveBrowser'
+import OralHistoryBrowser from '../../src/components/site-pages/OralHistoryBrowser'
 import OralHistoryCard from '../../src/components/site-pages/OralHistoryCard'
-import { about, archive, oralHistories } from '../../src/data/pages'
+import { about, archive, oralHistories, type OralHistory } from '../../src/data/pages'
 
 expect.extend(toHaveNoViolations)
 
-const pages: Array<[string, () => React.JSX.Element, string, string]> = [
-  ['About Us', AboutUsPage, about.title, '/about-us'],
-  ['Archive', ArchivePage, archive.title, '/archive'],
-  ['Oral Histories', OralHistoriesPage, oralHistories.title, '/oral-histories'],
+// [nav label, page, <h1> text]
+const pages: Array<[string, () => React.JSX.Element, string]> = [
+  ['About Us', AboutUsPage, about.title],
+  ['Archive', ArchivePage, archive.title],
+  ['Oral Histories', OralHistoriesPage, oralHistories.title],
 ]
 
 describe.each(pages)('%s page', (label, Page, title) => {
@@ -31,7 +33,8 @@ describe.each(pages)('%s page', (label, Page, title) => {
 
   it('marks itself as the current page in the header', () => {
     render(<Page />)
-    expect(screen.getByRole('link', { name: label })).toHaveAttribute('aria-current', 'page')
+    const nav = screen.getByRole('navigation', { name: 'Main' })
+    expect(within(nav).getByRole('link', { name: label })).toHaveAttribute('aria-current', 'page')
   })
 
   it('has no accessibility violations', async () => {
@@ -40,71 +43,197 @@ describe.each(pages)('%s page', (label, Page, title) => {
   })
 })
 
-describe('About Us page', () => {
-  it("shows Ali's mission statement and a placeholder for each pending section", () => {
+describe('About page tabs', () => {
+  it("has the concept's five tabs, Our Story first", () => {
     render(<AboutUsPage />)
-    expect(
-      screen.getByRole('heading', { level: 2, name: about.missionHeading })
-    ).toBeInTheDocument()
-    for (const heading of about.pendingSections) {
-      expect(screen.getByRole('heading', { level: 2, name: heading })).toBeInTheDocument()
+    const tabs = screen.getAllByRole('tab')
+    expect(tabs.map((tab) => tab.textContent)).toEqual(about.tabs.map((tab) => tab.label))
+    expect(tabs[0]).toHaveAttribute('aria-selected', 'true')
+    expect(screen.getByRole('tabpanel')).toHaveTextContent(about.tabs[0].paragraphs[0])
+  })
+
+  it('switches tabs on click and with the arrow keys', () => {
+    render(<AboutUsPage />)
+    fireEvent.click(screen.getByRole('tab', { name: 'Financials' }))
+    expect(screen.getByRole('tab', { name: 'Financials' })).toHaveAttribute('aria-selected', 'true')
+    expect(screen.getByRole('tabpanel')).toHaveTextContent('Coming soon.')
+
+    fireEvent.keyDown(screen.getByRole('tab', { name: 'Financials' }), { key: 'ArrowRight' })
+    expect(screen.getByRole('tab', { name: 'News' })).toHaveAttribute('aria-selected', 'true')
+    expect(screen.getByRole('tab', { name: 'News' })).toHaveFocus()
+
+    fireEvent.keyDown(screen.getByRole('tab', { name: 'News' }), { key: 'ArrowRight' })
+    expect(screen.getByRole('tab', { name: 'Our Story' })).toHaveAttribute('aria-selected', 'true')
+  })
+
+  it('Meet Our Leadership opens the Leadership tab', () => {
+    render(<AboutUsPage />)
+    fireEvent.click(screen.getByRole('button', { name: about.meetLeadership }))
+    expect(screen.getByRole('tab', { name: 'Leadership' })).toHaveAttribute('aria-selected', 'true')
+  })
+
+  it('lists the five values', () => {
+    render(<AboutUsPage />)
+    const values = screen.getByRole('complementary', { name: about.valuesHeading })
+    for (const { label } of about.values) {
+      expect(within(values).getByText(label)).toBeInTheDocument()
     }
-    expect(screen.getAllByText('Coming soon.')).toHaveLength(about.pendingSections.length)
   })
 })
 
 describe('Archive page', () => {
-  it('has a browse-by-type link and a section for every type', () => {
-    const { container } = render(<ArchivePage />)
-    const browse = screen.getByRole('navigation', { name: 'Browse by type' })
-    for (const { type, heading } of archive.types) {
-      expect(browse.querySelector(`a[href="#${type}"]`)).toHaveTextContent(heading)
-      expect(container.querySelector(`section#${type}`)).toBeInTheDocument()
+  it("has the search bar, the concept's six type tiles and the collections", () => {
+    render(<ArchivePage />)
+    expect(screen.getByRole('searchbox', { name: archive.searchLabel })).toBeInTheDocument()
+    const tiles = screen.getByRole('list', { name: archive.browseHeading })
+    expect(
+      within(tiles)
+        .getAllByRole('listitem')
+        .map((li) => li.textContent)
+    ).toEqual(archive.types.map((t) => t.label))
+    expect(within(tiles).getByRole('link', { name: 'Oral Histories' })).toHaveAttribute(
+      'href',
+      '/oral-histories'
+    )
+    for (const name of archive.collections) {
+      expect(screen.getByRole('heading', { level: 3, name })).toBeInTheDocument()
     }
   })
 })
 
-describe('ArchiveSection', () => {
-  const item = {
-    type: 'article' as const,
-    title: 'Example article',
-    source: 'Example Times',
-    date: '2008',
-    url: 'https://example.com/article',
-  }
+describe('ArchiveBrowser', () => {
+  const items = [
+    {
+      type: 'publication' as const,
+      title: 'Example article',
+      source: 'Example Times',
+      url: 'https://example.com/a',
+    },
+    {
+      type: 'photograph' as const,
+      title: 'Example photo set',
+      source: 'Example Archive',
+      url: 'https://example.com/p',
+    },
+  ]
+  const renderBrowser = (list = items) =>
+    render(
+      <ArchiveBrowser
+        searchLabel={archive.searchLabel}
+        searchPlaceholder={archive.searchPlaceholder}
+        browseHeading={archive.browseHeading}
+        types={archive.types}
+        items={list}
+        emptyMessage={archive.emptyMessage}
+      />
+    )
 
-  it('shows "coming soon" when a type has no items', () => {
-    render(<ArchiveSection type="news" heading="News" items={[]} />)
-    expect(screen.getByText('Coming soon.')).toBeInTheDocument()
+  it('shows nothing until someone searches or picks a type', () => {
+    renderBrowser()
+    expect(screen.queryByText('Example article')).toBeNull()
   })
 
-  it('links each item out to its source in a new tab', async () => {
-    const { container } = render(
-      <ArchiveSection type="article" heading="Articles" items={[item]} />
+  it('filters by search text', () => {
+    renderBrowser()
+    fireEvent.change(screen.getByRole('searchbox'), { target: { value: 'photo' } })
+    expect(screen.getByRole('link', { name: /Example photo set/ })).toHaveAttribute(
+      'target',
+      '_blank'
     )
-    const link = screen.getByRole('link', { name: /Example article/ })
-    expect(link).toHaveAttribute('href', item.url)
-    expect(link).toHaveAttribute('target', '_blank')
-    expect(link).toHaveAttribute('rel', expect.stringContaining('noopener'))
-    expect(screen.getByText('Example Times · 2008')).toBeInTheDocument()
-    expect(await axe(container)).toHaveNoViolations()
+    expect(screen.queryByText('Example article')).toBeNull()
+  })
+
+  it('toggles a type tile', () => {
+    renderBrowser()
+    const tile = screen.getByRole('button', { name: 'Publications' })
+    fireEvent.click(tile)
+    expect(tile).toHaveAttribute('aria-pressed', 'true')
+    expect(screen.getByText('Example article')).toBeInTheDocument()
+    expect(screen.queryByText('Example photo set')).toBeNull()
+    fireEvent.click(tile)
+    expect(tile).toHaveAttribute('aria-pressed', 'false')
+  })
+
+  it('explains an empty archive', () => {
+    renderBrowser([])
+    fireEvent.click(screen.getByRole('button', { name: 'Documents' }))
+    expect(screen.getByText(archive.emptyMessage)).toBeInTheDocument()
   })
 })
 
 describe('Oral Histories page', () => {
-  it('shows the empty state until interviews are published', () => {
+  it('has the search bar, the four filters and the empty state', () => {
     render(<OralHistoriesPage />)
+    expect(screen.getByRole('searchbox', { name: oralHistories.searchLabel })).toBeInTheDocument()
+    for (const { label } of oralHistories.filters) {
+      expect(screen.getByRole('combobox', { name: label })).toBeInTheDocument()
+    }
     expect(oralHistories.entries).toHaveLength(0)
-    expect(screen.getByText(/Interviews will appear here/)).toBeInTheDocument()
+    expect(screen.getByText(oralHistories.emptyMessage)).toBeInTheDocument()
+  })
+})
+
+describe('OralHistoryBrowser', () => {
+  const make = (n: number, extra: Partial<OralHistory> = {}): OralHistory => ({
+    id: `e${n}`,
+    displayName: `Example ${n}.`,
+    ...extra,
+  })
+  const entries = [
+    make(1, { location: 'Baghdad', served: [2004, 2007], language: 'Arabic' }),
+    make(2, { location: 'Basra', served: [2008, 2010], language: 'Kurdish' }),
+    ...Array.from({ length: 10 }, (_, i) => make(i + 3)),
+  ]
+  const renderBrowser = () =>
+    render(
+      <OralHistoryBrowser
+        entries={entries}
+        searchLabel={oralHistories.searchLabel}
+        searchPlaceholder={oralHistories.searchPlaceholder}
+        filters={oralHistories.filters}
+        pageSize={9}
+        loadMore={oralHistories.loadMore}
+        emptyMessage={oralHistories.emptyMessage}
+        noMatches={oralHistories.noMatches}
+      />
+    )
+
+  it('shows nine cards, then loads more', () => {
+    renderBrowser()
+    expect(screen.getAllByRole('article')).toHaveLength(9)
+    fireEvent.click(screen.getByRole('button', { name: oralHistories.loadMore }))
+    expect(screen.getAllByRole('article')).toHaveLength(12)
+    expect(screen.queryByRole('button', { name: oralHistories.loadMore })).toBeNull()
+  })
+
+  it('filters by year within the years served', () => {
+    renderBrowser()
+    fireEvent.change(screen.getByRole('combobox', { name: 'Year' }), { target: { value: '2005' } })
+    expect(screen.getAllByRole('article')).toHaveLength(1)
+    expect(screen.getByRole('heading', { name: 'Example 1.' })).toBeInTheDocument()
+  })
+
+  it('lists only values present in the entries, and resets', () => {
+    renderBrowser()
+    const location = screen.getByRole('combobox', { name: 'Location' })
+    expect(
+      within(location)
+        .getAllByRole('option')
+        .map((o) => o.textContent)
+    ).toEqual(['Location', 'Baghdad', 'Basra'])
+    fireEvent.change(location, { target: { value: 'Basra' } })
+    expect(screen.getAllByRole('article')).toHaveLength(1)
+    fireEvent.change(screen.getByRole('searchbox'), { target: { value: 'nobody' } })
+    expect(screen.getByText(oralHistories.noMatches)).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Reset' }))
+    expect(screen.getAllByRole('article')).toHaveLength(9)
   })
 })
 
 describe('OralHistoryCard', () => {
   it('shows a neutral icon, not a photo, when none is approved', async () => {
     const { container } = render(
-      <OralHistoryCard
-        entry={{ id: 'a', displayName: 'Anonymous interpreter', summary: 'Summary text.' }}
-      />
+      <OralHistoryCard entry={{ id: 'a', displayName: 'Anonymous interpreter' }} />
     )
     expect(container.querySelector('img')).toBeNull()
     expect(screen.getByRole('heading', { level: 3, name: 'Anonymous interpreter' })).toBeVisible()
@@ -112,14 +241,14 @@ describe('OralHistoryCard', () => {
     expect(await axe(container)).toHaveNoViolations()
   })
 
-  it('shows an approved photo and links to the video and transcript', async () => {
+  it('shows an approved photo, place, years and Watch / Read links', async () => {
     const { container } = render(
       <OralHistoryCard
         entry={{
           id: 'b',
           displayName: 'Example N.',
-          served: '2004–2007',
-          summary: 'Summary text.',
+          location: 'Baghdad',
+          served: [2004, 2007],
           photo: { file: 'example.webp', alt: 'Portrait of Example N.' },
           videoUrl: 'https://example.com/video',
           transcriptUrl: 'https://example.com/transcript',
@@ -130,7 +259,8 @@ describe('OralHistoryCard', () => {
       'src',
       expect.stringContaining('/Images/oral-histories/example.webp')
     )
-    expect(screen.getByText('Served 2004–2007')).toBeInTheDocument()
+    expect(screen.getByText('Baghdad')).toBeInTheDocument()
+    expect(screen.getByText('2004–2007')).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /Watch/ })).toHaveAttribute(
       'href',
       'https://example.com/video'

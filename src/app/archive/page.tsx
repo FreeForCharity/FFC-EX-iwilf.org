@@ -1,8 +1,9 @@
 import React from 'react'
 import type { Metadata } from 'next'
+import { FolderOpen } from 'lucide-react'
 import SiteHeader from '@/components/site-header'
 import PageIntro from '@/components/site-pages/PageIntro'
-import ArchiveSection from '@/components/site-pages/ArchiveSection'
+import ArchiveBrowser from '@/components/site-pages/ArchiveBrowser'
 import { archive } from '@/data/pages'
 import { pageMetadata } from '@/lib/pageMetadata'
 
@@ -19,32 +20,45 @@ const ArchivePage = () => {
       <main id="main-content" className="bg-iwilf-warm-white">
         <PageIntro title={archive.title} intro={archive.intro} />
 
-        <div className="mx-auto max-w-[1248px] px-4 py-16 md:px-8 lg:py-20">
-          <nav aria-label="Browse by type">
-            <ul className="flex flex-wrap gap-3">
-              {archive.types.map(({ type, heading }) => (
-                <li key={type}>
-                  <a
-                    href={`#${type}`}
-                    className="inline-flex min-h-[44px] items-center rounded border border-iwilf-navy px-4 font-iwilf-sans text-base text-iwilf-navy hover:bg-iwilf-navy hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-iwilf-navy focus-visible:ring-offset-2"
+        <div className="mx-auto max-w-[1248px] px-4 py-12 md:px-8 lg:py-16">
+          <ArchiveBrowser
+            searchLabel={archive.searchLabel}
+            searchPlaceholder={archive.searchPlaceholder}
+            browseHeading={archive.browseHeading}
+            types={archive.types}
+            items={archive.items}
+            emptyMessage={archive.emptyMessage}
+          />
+
+          <section
+            aria-labelledby="collections-heading"
+            className="mt-12 border-t border-iwilf-stone pt-10"
+          >
+            <h2
+              id="collections-heading"
+              className="font-iwilf-sans text-sm font-bold uppercase tracking-wider text-iwilf-charcoal"
+            >
+              {archive.collectionsHeading}
+            </h2>
+            {/* The concept shows a photo per collection; until there are
+                approved photos and items, each card is a placeholder. */}
+            <ul className="mt-4 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {archive.collections.map((name) => (
+                <li key={name}>
+                  <div
+                    aria-hidden="true"
+                    className="flex aspect-[4/3] items-center justify-center rounded bg-iwilf-navy"
                   >
-                    {heading}
-                  </a>
+                    <FolderOpen className="h-12 w-12 text-iwilf-bronze-light" strokeWidth={1.25} />
+                  </div>
+                  <h3 className="mt-3 font-iwilf-sans text-base font-bold text-iwilf-charcoal">
+                    {name}
+                  </h3>
+                  <p className="font-iwilf-sans text-sm text-iwilf-charcoal">Coming soon</p>
                 </li>
               ))}
             </ul>
-          </nav>
-
-          <div className="mt-12 grid gap-14">
-            {archive.types.map(({ type, heading }) => (
-              <ArchiveSection
-                key={type}
-                type={type}
-                heading={heading}
-                items={archive.items.filter((item) => item.type === type)}
-              />
-            ))}
-          </div>
+          </section>
         </div>
       </main>
     </>
