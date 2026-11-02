@@ -5,7 +5,7 @@ import SiteHeader from '@/components/site-header'
 const page = () => {
   return (
     <>
-      <SiteHeader />
+      <SiteHeader current="/" />
       <main id="main-content">
         <HomePage />
       </main>

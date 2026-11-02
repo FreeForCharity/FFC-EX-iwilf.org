@@ -35,13 +35,13 @@ const SiteHeader = ({ current }: SiteHeaderProps) => {
         </Link>
 
         <nav aria-label="Main" className="order-last w-full">
-          <ul className="flex flex-wrap items-center justify-center gap-x-1 md:gap-x-6">
+          <ul className="flex flex-wrap items-center justify-center md:gap-x-6">
             {navLinks.map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}
                   aria-current={link.href === current ? 'page' : undefined}
-                  className="inline-flex min-h-[44px] items-center rounded px-2 font-iwilf-sans text-base hover:text-iwilf-bronze-light focus:outline-none focus-visible:ring-2 focus-visible:ring-iwilf-bronze-light aria-[current=page]:text-iwilf-bronze-light aria-[current=page]:underline aria-[current=page]:underline-offset-8"
+                  className="inline-flex min-h-[44px] items-center rounded px-1.5 md:px-2 font-iwilf-sans text-base hover:text-iwilf-bronze-light focus:outline-none focus-visible:ring-2 focus-visible:ring-iwilf-bronze-light aria-[current=page]:text-iwilf-bronze-light aria-[current=page]:underline aria-[current=page]:underline-offset-8"
                 >
                   {link.label}
                 </Link>
@@ -54,7 +54,7 @@ const SiteHeader = ({ current }: SiteHeaderProps) => {
           href={donateUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex min-h-[44px] items-center rounded bg-iwilf-bronze-dark px-4 md:px-5 font-iwilf-sans text-base font-bold uppercase tracking-wide text-white hover:bg-iwilf-bronze-light hover:text-iwilf-navy focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+          className="inline-flex min-h-[44px] items-center rounded bg-iwilf-bronze-dark px-3 md:px-5 font-iwilf-sans text-base font-bold uppercase tracking-wide text-white hover:bg-iwilf-bronze-light hover:text-iwilf-navy focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
         >
           Donate
           <span className="sr-only"> (opens in a new tab)</span>
