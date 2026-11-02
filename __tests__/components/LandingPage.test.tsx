@@ -7,6 +7,7 @@ import Hero from '../../src/components/home-page/Hero'
 import MissionSection from '../../src/components/home-page/MissionSection'
 import SupportSection from '../../src/components/home-page/SupportSection'
 import { donateUrl, mission, navLinks } from '../../src/data/landing'
+import { routes } from '../../src/app/sitemap'
 
 expect.extend(toHaveNoViolations)
 
@@ -31,11 +32,17 @@ describe('SiteHeader', () => {
     expectSafeDonateLink(screen.getByRole('link', { name: /donate/i }))
   })
 
-  it('only links to sections that exist on the landing page', () => {
-    const sectionIds = ['#mission', '#support']
+  it('only links to pages the site publishes', () => {
+    const published = routes.map((route) => route.path)
     for (const link of navLinks) {
-      expect(sectionIds).toContain(link.href)
+      expect(published).toContain(link.href)
     }
+  })
+
+  it('marks the current page in the navigation', () => {
+    render(<SiteHeader current="/archive" />)
+    expect(screen.getByRole('link', { name: 'Archive' })).toHaveAttribute('aria-current', 'page')
+    expect(screen.getByRole('link', { name: 'About Us' })).not.toHaveAttribute('aria-current')
   })
 
   it('has no accessibility violations', async () => {

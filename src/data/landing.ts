@@ -23,11 +23,14 @@ export const orgName = 'Iraq War Interpreters Legacy Foundation'
 // once the rebrand lands.
 export const donateUrl = 'https://www.zeffy.com/en-US/donation-form/support-iwilfs-mission'
 
-// Only sections that exist on the page. Archive, Oral Histories, Research,
-// Education and About join this list when their pages are built.
+// Site pages in the order Ali set (issue #5 follow-up, 2026-11-02): About Us
+// first. Bare routes for next/link, which adds the GitHub Pages base path.
+// Contact joins once the footer shows IWILF's details (FFC's rebrand, #6);
+// until then the footer's Contact block still lists FFC's.
 export const navLinks: NavLink[] = [
-  { label: 'Our Mission', href: '#mission' },
-  { label: 'Support', href: '#support' },
+  { label: 'About Us', href: '/about-us' },
+  { label: 'Archive', href: '/archive' },
+  { label: 'Oral Histories', href: '/oral-histories' },
 ]
 
 export const hero = {

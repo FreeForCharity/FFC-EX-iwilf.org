@@ -17,6 +17,9 @@ type SitemapEntry = {
  */
 export const routes: readonly SitemapEntry[] = [
   { path: '/', changeFrequency: 'weekly', priority: 1.0 },
+  { path: '/about-us', changeFrequency: 'monthly', priority: 0.8 },
+  { path: '/archive', changeFrequency: 'weekly', priority: 0.8 },
+  { path: '/oral-histories', changeFrequency: 'weekly', priority: 0.8 },
   { path: '/privacy-policy', changeFrequency: 'yearly', priority: 0.2 },
   { path: '/cookie-policy', changeFrequency: 'yearly', priority: 0.2 },
   { path: '/terms-of-service', changeFrequency: 'yearly', priority: 0.2 },
