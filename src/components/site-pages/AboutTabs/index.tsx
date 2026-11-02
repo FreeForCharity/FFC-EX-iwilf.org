@@ -64,7 +64,7 @@ const AboutTabs = ({ tabs, meetLeadership, valuesHeading, values }: AboutTabsPro
       <div
         role="tablist"
         aria-label="About the Foundation"
-        className="flex gap-1 overflow-x-auto border-b border-iwilf-stone sm:justify-between"
+        className="flex flex-wrap gap-x-2 border-b-2 border-iwilf-stone sm:gap-x-6"
       >
         {tabs.map((tab, index) => {
           const selected = tab.id === active
@@ -82,7 +82,7 @@ const AboutTabs = ({ tabs, meetLeadership, valuesHeading, values }: AboutTabsPro
               tabIndex={selected ? 0 : -1}
               onClick={() => select(tab.id)}
               onKeyDown={(event) => onKeyDown(event, index)}
-              className={`min-h-[48px] shrink-0 whitespace-nowrap border-b-4 px-4 font-iwilf-sans text-base focus:outline-none focus-visible:ring-2 focus-visible:ring-iwilf-navy sm:flex-1 ${
+              className={`-mb-0.5 min-h-[48px] whitespace-nowrap border-b-4 px-2 font-iwilf-sans text-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-iwilf-navy ${
                 selected
                   ? 'border-iwilf-navy font-bold text-iwilf-navy'
                   : 'border-transparent text-iwilf-charcoal hover:text-iwilf-navy'
@@ -106,18 +106,18 @@ const AboutTabs = ({ tabs, meetLeadership, valuesHeading, values }: AboutTabsPro
               hidden={tab.id !== active}
               className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-iwilf-navy"
             >
-              <h2 className="sr-only">{tab.label}</h2>
+              <h2 className="mb-5 font-iwilf-serif text-3xl text-iwilf-navy">{tab.label}</h2>
               {tab.paragraphs.length > 0 ? (
                 tab.paragraphs.map((paragraph) => (
                   <p
                     key={paragraph}
-                    className="mb-4 font-iwilf-sans text-lg leading-relaxed text-iwilf-charcoal"
+                    className="mb-6 max-w-[62ch] font-iwilf-sans text-lg leading-8 text-iwilf-charcoal"
                   >
                     {paragraph}
                   </p>
                 ))
               ) : (
-                <p className="rounded border border-dashed border-iwilf-bronze bg-white/60 px-4 py-3 font-iwilf-sans text-base text-iwilf-charcoal">
+                <p className="max-w-[62ch] rounded border border-dashed border-iwilf-bronze bg-white px-5 py-4 font-iwilf-sans text-lg text-iwilf-charcoal">
                   Coming soon.
                 </p>
               )}
@@ -125,7 +125,7 @@ const AboutTabs = ({ tabs, meetLeadership, valuesHeading, values }: AboutTabsPro
                 <button
                   type="button"
                   onClick={() => select('leadership', true)}
-                  className="mt-6 min-h-[48px] rounded bg-iwilf-navy px-8 font-iwilf-sans text-sm font-bold uppercase tracking-wide text-white hover:bg-iwilf-bronze-dark focus:outline-none focus-visible:ring-2 focus-visible:ring-iwilf-navy focus-visible:ring-offset-2"
+                  className="mt-2 min-h-[48px] rounded bg-iwilf-navy px-8 font-iwilf-sans text-sm font-bold uppercase tracking-wide text-white hover:bg-iwilf-bronze-dark focus:outline-none focus-visible:ring-2 focus-visible:ring-iwilf-navy focus-visible:ring-offset-2"
                 >
                   {meetLeadership}
                 </button>
@@ -136,20 +136,25 @@ const AboutTabs = ({ tabs, meetLeadership, valuesHeading, values }: AboutTabsPro
 
         <aside
           aria-labelledby="values-heading"
-          className="self-start rounded bg-iwilf-stone/60 p-8"
+          className="self-start rounded border border-iwilf-stone border-t-4 border-t-iwilf-navy bg-white p-8 shadow-sm"
         >
-          <h2 id="values-heading" className="font-iwilf-sans text-xl font-bold text-iwilf-charcoal">
+          <h2 id="values-heading" className="font-iwilf-serif text-2xl text-iwilf-navy">
             {valuesHeading}
           </h2>
-          <ul className="mt-5 grid gap-5">
+          <ul className="mt-6 grid gap-4">
             {values.map(({ id, label }) => {
               const Icon = valueIcons[id]
               return (
                 <li
                   key={id}
-                  className="flex items-center gap-4 font-iwilf-sans text-lg text-iwilf-charcoal"
+                  className="flex items-center gap-4 font-iwilf-sans text-lg font-medium text-iwilf-charcoal"
                 >
-                  <Icon aria-hidden="true" className="h-6 w-6 text-iwilf-navy" strokeWidth={1.5} />
+                  <span
+                    aria-hidden="true"
+                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-iwilf-stone text-iwilf-navy"
+                  >
+                    <Icon className="h-5 w-5" strokeWidth={1.75} />
+                  </span>
                   {label}
                 </li>
               )
