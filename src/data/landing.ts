@@ -36,7 +36,7 @@ export const navLinks: NavLink[] = [
 ]
 
 export const hero = {
-  titleLead: 'Alliance in Action:',
+  titleLead: 'Allies in Action:',
   title: 'Documenting the Heroism of Iraq War Interpreters',
   intro:
     'Preserving the history, service, and legacy of Iraqi interpreters through archives, oral histories, research, and education.',
