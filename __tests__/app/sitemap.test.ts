@@ -3,7 +3,10 @@ import nextConfig from '../../next.config'
 import sitemap, { routes } from '../../src/app/sitemap'
 import { canonicalPath, siteConfig, siteUrl, trailingSlash } from '../../src/lib/site.config'
 import { siteMetadata } from '../../src/lib/siteMetadata'
+import { metadata as aboutUsMetadata } from '../../src/app/about-us/page'
+import { metadata as archiveMetadata } from '../../src/app/archive/page'
 import { metadata as cookiePolicyMetadata } from '../../src/app/cookie-policy/page'
+import { metadata as oralHistoriesMetadata } from '../../src/app/oral-histories/page'
 import { metadata as donationPolicyMetadata } from '../../src/app/donation-policy/page'
 import { metadata as ffcDonationPolicyMetadata } from '../../src/app/free-for-charity-donation-policy/page'
 import { metadata as privacyPolicyMetadata } from '../../src/app/privacy-policy/page'
@@ -18,6 +21,9 @@ const TEST_BASE_PATH = '/Example-Project-Path'
 /** Metadata that owns the canonical tag for each sitemap route. */
 const metadataByRoute: Record<string, Metadata> = {
   '/': siteMetadata,
+  '/about-us': aboutUsMetadata,
+  '/archive': archiveMetadata,
+  '/oral-histories': oralHistoriesMetadata,
   '/privacy-policy': privacyPolicyMetadata,
   '/cookie-policy': cookiePolicyMetadata,
   '/terms-of-service': termsOfServiceMetadata,

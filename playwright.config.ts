@@ -58,6 +58,7 @@ export default defineConfig({
     'security-metadata.spec.ts',
     'policy-pages.spec.ts',
     'landing-page.spec.ts',
+    'site-pages.spec.ts',
   ],
   // Run tests in parallel for better performance
   fullyParallel: true,
@@ -97,6 +98,7 @@ export default defineConfig({
         'copyright.spec.ts',
         'policy-pages.spec.ts',
         'landing-page.spec.ts',
+        'site-pages.spec.ts',
       ],
       use: {
         ...devices['Pixel 5'],

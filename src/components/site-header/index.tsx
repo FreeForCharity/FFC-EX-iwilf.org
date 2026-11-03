@@ -3,11 +3,16 @@ import Link from 'next/link'
 import { assetPath } from '@/lib/assetPath'
 import { donateUrl, navLinks, orgName } from '@/data/landing'
 
-// IWILF top bar: seal, name, in-page section links and the Donate button.
-// A new component rather than an edit to src/components/header, which FFC's
-// rebrand PR #6 also changes. Server component: the two links wrap on small
-// screens, so no menu toggle (and no client JS) is needed yet.
-const SiteHeader = () => {
+interface SiteHeaderProps {
+  /** Route of the page being shown, so its nav link gets aria-current. */
+  current?: string
+}
+
+// IWILF top bar: seal, name, page links and the Donate button. A new
+// component rather than an edit to src/components/header, which FFC's rebrand
+// PR #6 also changes. Server component: the links wrap on small screens, so no
+// menu toggle (and no client JS) is needed yet.
+const SiteHeader = ({ current }: SiteHeaderProps) => {
   return (
     <header className="bg-iwilf-navy text-white">
       {/* Seal and Donate on the top row, section links centred on a row
@@ -30,15 +35,16 @@ const SiteHeader = () => {
         </Link>
 
         <nav aria-label="Main" className="order-last w-full">
-          <ul className="flex items-center justify-center gap-1 md:gap-6">
+          <ul className="flex flex-wrap items-center justify-center md:gap-x-6">
             {navLinks.map((link) => (
               <li key={link.href}>
-                <a
+                <Link
                   href={link.href}
-                  className="inline-flex min-h-[44px] items-center rounded px-2 font-iwilf-sans text-base hover:text-iwilf-bronze-light focus:outline-none focus-visible:ring-2 focus-visible:ring-iwilf-bronze-light"
+                  aria-current={link.href === current ? 'page' : undefined}
+                  className="inline-flex min-h-[44px] items-center rounded px-1.5 md:px-2 font-iwilf-sans text-base hover:text-iwilf-bronze-light focus:outline-none focus-visible:ring-2 focus-visible:ring-iwilf-bronze-light aria-[current=page]:text-iwilf-bronze-light aria-[current=page]:underline aria-[current=page]:underline-offset-8"
                 >
                   {link.label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
@@ -48,7 +54,7 @@ const SiteHeader = () => {
           href={donateUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex min-h-[44px] items-center rounded bg-iwilf-bronze-dark px-4 md:px-5 font-iwilf-sans text-base font-bold uppercase tracking-wide text-white hover:bg-iwilf-bronze-light hover:text-iwilf-navy focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+          className="inline-flex min-h-[44px] items-center rounded bg-iwilf-bronze-dark px-3 md:px-5 font-iwilf-sans text-base font-bold uppercase tracking-wide text-white hover:bg-iwilf-bronze-light hover:text-iwilf-navy focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
         >
           Donate
           <span className="sr-only"> (opens in a new tab)</span>
