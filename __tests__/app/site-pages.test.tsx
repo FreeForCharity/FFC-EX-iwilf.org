@@ -1,5 +1,5 @@
 import React from 'react'
-import { fireEvent, render, screen, within } from '@testing-library/react'
+import { act, fireEvent, render, screen, within } from '@testing-library/react'
 import { axe, toHaveNoViolations } from 'jest-axe'
 
 import AboutUsPage from '../../src/app/about-us/page'
@@ -64,6 +64,22 @@ describe('About page tabs', () => {
 
     fireEvent.keyDown(screen.getByRole('tab', { name: 'News' }), { key: 'ArrowRight' })
     expect(screen.getByRole('tab', { name: 'Our Story' })).toHaveAttribute('aria-selected', 'true')
+  })
+
+  it('follows the URL fragment, also when it changes while the page is open', () => {
+    window.history.replaceState(null, '', '#leadership')
+    render(<AboutUsPage />)
+    expect(screen.getByRole('tab', { name: 'Leadership' })).toHaveAttribute('aria-selected', 'true')
+
+    act(() => {
+      window.location.hash = '#board'
+      window.dispatchEvent(new HashChangeEvent('hashchange'))
+    })
+    expect(screen.getByRole('tab', { name: 'Board of Directors' })).toHaveAttribute(
+      'aria-selected',
+      'true'
+    )
+    window.history.replaceState(null, '', window.location.pathname)
   })
 
   it('Meet Our Leadership opens the Leadership tab', () => {

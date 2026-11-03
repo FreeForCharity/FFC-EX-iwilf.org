@@ -22,14 +22,20 @@ interface AboutTabsProps {
 
 // The concept's five About tabs, with Our Values beside them. Follows the WAI
 // tabs pattern: arrow keys, Home and End move between tabs. A link to
-// /about-us/#leadership (or any tab id) opens that tab.
+// /about-us/#leadership (or any tab id) opens that tab, including when the
+// fragment changes while the page is open.
 const AboutTabs = ({ tabs, meetLeadership, valuesHeading, values }: AboutTabsProps) => {
   const [active, setActive] = useState<AboutTabId>(tabs[0].id)
   const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({})
 
   useEffect(() => {
-    const fromHash = window.location.hash.slice(1)
-    if (tabs.some((tab) => tab.id === fromHash)) setActive(fromHash as AboutTabId)
+    const syncFromHash = () => {
+      const fromHash = window.location.hash.slice(1)
+      if (tabs.some((tab) => tab.id === fromHash)) setActive(fromHash as AboutTabId)
+    }
+    syncFromHash()
+    window.addEventListener('hashchange', syncFromHash)
+    return () => window.removeEventListener('hashchange', syncFromHash)
   }, [tabs])
 
   const select = (id: AboutTabId, focus = false) => {
