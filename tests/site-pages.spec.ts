@@ -20,6 +20,22 @@ test.describe('IWILF site pages', () => {
     }
   })
 
+  test('Leadership bios open and close section by section', async ({ page }) => {
+    await page.goto('/about-us/#leadership')
+    const panel = page.getByRole('tabpanel')
+    const section = panel.locator('details').first()
+    const firstParagraph = section.locator('p').first()
+
+    await expect(panel.getByRole('heading', { level: 3, name: 'Ali Almrayatee' })).toBeVisible()
+    await expect(firstParagraph).toBeHidden()
+
+    await section.locator('summary').click()
+    await expect(firstParagraph).toBeVisible()
+
+    await section.locator('summary').click()
+    await expect(firstParagraph).toBeHidden()
+  })
+
   for (const link of navLinks) {
     test(`${served(link.href)} has no horizontal scroll on a phone`, async ({ page }) => {
       await page.setViewportSize({ width: 375, height: 812 })

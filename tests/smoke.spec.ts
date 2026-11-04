@@ -46,15 +46,15 @@ const footerPolicyLinks = [
   // The charity's own donation policy. Matched with exact names below so this
   // does not also match "Free For Charity Donation Policy".
   { name: 'Donation Policy', pathSuffix: '/donation-policy' },
-  { name: `${testConfig.site.name} Privacy Policy`, pathSuffix: '/privacy-policy' },
-  { name: `${testConfig.site.name} Cookie Policy`, pathSuffix: '/cookie-policy' },
-  { name: `${testConfig.site.name} Terms of Service`, pathSuffix: '/terms-of-service' },
+  { name: 'Privacy Policy', pathSuffix: '/privacy-policy' },
+  { name: 'Cookie Policy', pathSuffix: '/cookie-policy' },
+  { name: 'Terms of Service', pathSuffix: '/terms-of-service' },
   {
-    name: `${testConfig.site.name} Vulnerability Disclosure Policy`,
+    name: 'Vulnerability Disclosure Policy',
     pathSuffix: '/vulnerability-disclosure-policy',
   },
   {
-    name: `${testConfig.site.name} Security Acknowledgement`,
+    name: 'Security Acknowledgement',
     pathSuffix: '/security-acknowledgements',
   },
 ]
@@ -85,9 +85,7 @@ test.describe('Post-deploy smoke tests', () => {
     await expect(footer.getByRole('heading', { name: 'Contact Us' })).toBeVisible()
 
     // Policy section heading
-    await expect(
-      footer.getByRole('heading', { name: `${testConfig.site.name} Policy` })
-    ).toBeVisible()
+    await expect(footer.getByRole('heading', { name: 'Legal & Policies' })).toBeVisible()
   })
 
   test('footer contains policy links with correct paths', async ({ page }) => {
@@ -125,7 +123,8 @@ test.describe('Post-deploy smoke tests', () => {
     await expect(copyrightText).toContainText(testConfig.copyright.text)
 
     // Organization link in copyright
-    const orgLink = footer.getByRole('link', { name: testConfig.copyright.linkText })
+    // exact: the FFC Donation Policy link also contains this name.
+    const orgLink = footer.getByRole('link', { name: testConfig.copyright.linkText, exact: true })
     await expect(orgLink).toBeVisible()
     await expect(orgLink).toHaveAttribute('href', testConfig.copyright.linkUrl)
   })
@@ -160,6 +159,10 @@ test.describe('Post-deploy smoke tests', () => {
   })
 
   test('GTM loads and dataLayer is available', async ({ page }) => {
+    // An empty GTM_ID is a supported state (no container provisioned yet; see
+    // src/lib/analytics.config.ts), in which no GTM script renders.
+    test.skip(!testConfig.googleTagManager.configured, 'No GTM container provisioned yet.')
+
     await page.goto('./')
 
     // Wait for lazy-loaded GTM script (strategy="lazyOnload")

@@ -8,7 +8,6 @@ import { FaFacebookF, FaLinkedinIn, FaGithub } from 'react-icons/fa'
 import { FaXTwitter } from 'react-icons/fa6'
 import type { IconType } from 'react-icons'
 import type { LucideIcon } from 'lucide-react'
-import { assetPath } from '@/lib/assetPath'
 import { donateHref, mailtoHref, siteConfig, volunteerHref } from '@/lib/site.config'
 
 // Maps a social link's label (as defined in siteConfig.social) to an icon.
@@ -23,6 +22,36 @@ const socialIconByLabel: Record<string, IconType | LucideIcon> = {
   LinkedIn: FaLinkedinIn,
   GitHub: FaGithub,
 }
+
+// The policy links, grouped under "Legal & Policies". Every link is part of the
+// FFC footer standard; only the grouping and the shorter labels are IWILF's.
+const policyGroups: Array<{ heading: string; links: Array<{ name: string; href?: string }> }> = [
+  {
+    heading: 'Donations',
+    links: [
+      { name: 'Donation Policy', href: '/donation-policy' },
+      // Hardcoded on purpose: this page documents FFC's OWN donation policy, so
+      // the label keeps FFC's name. The entry above is the charity's own policy.
+      { name: 'Free For Charity Donation Policy', href: '/free-for-charity-donation-policy' },
+    ],
+  },
+  {
+    heading: 'Privacy & Website',
+    links: [
+      { name: 'Privacy Policy', href: '/privacy-policy' },
+      { name: 'Cookie Policy', href: '/cookie-policy' },
+      { name: 'Cookie Preferences' },
+      { name: 'Terms of Service', href: '/terms-of-service' },
+    ],
+  },
+  {
+    heading: 'Security & Compliance',
+    links: [
+      { name: 'Vulnerability Disclosure Policy', href: '/vulnerability-disclosure-policy' },
+      { name: 'Security Acknowledgement', href: '/security-acknowledgements' },
+    ],
+  },
+]
 
 const Footer: React.FC = () => {
   const currentYear = React.useMemo(() => new Date().getFullYear(), [])
@@ -39,21 +68,12 @@ const Footer: React.FC = () => {
         <p className="aria-font text-[18px] mt-2">{siteConfig.mission}</p>
       </div>
 
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 py-12 px-4 md:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 py-12 px-4 md:px-6 lg:px-8">
         {/* Column 1: Endorsements */}
         <div className="space-y-6 px-4 sm:px-0">
           <h3 className="text-[28px] text-white">Endorsements</h3>
 
           <div className="space-y-4">
-            <a
-              href={siteConfig.guidestar.profileUrl}
-              aria-label={`View ${siteConfig.name} GuideStar Profile`}
-            >
-              <img
-                src={assetPath('/Svgs/footerImage.svg')}
-                alt="GuideStar Platinum Seal of Transparency"
-              />
-            </a>
             <Link
               href={siteConfig.guidestar.directProfileUrl}
               className="group relative my-4 flex w-full max-w-[230px] items-center justify-between
@@ -102,7 +122,6 @@ const Footer: React.FC = () => {
               // the ids the home page really renders, so a dead link added here
               // fails the suite instead of shipping.
               { name: 'Home', href: '/' },
-              { name: 'Team', href: '/#team' },
               // Giving and volunteering pathways. Each is a single link, not a
               // page section: the configured URL, or an email to the charity
               // when none is set (see donateHref / volunteerHref).
@@ -128,70 +147,50 @@ const Footer: React.FC = () => {
               )
             })}
           </ul>
-
-          <div className="space-y-3">
-            <h4 className="text-[28px] text-white">{siteConfig.name} Policy</h4>
-            <ul className="space-y-1 text-sm" id="lato-font">
-              {[
-                {
-                  // Hardcoded on purpose: this page documents FFC's OWN
-                  // donation policy, so the label must keep FFC's name even
-                  // after a fork rebrands siteConfig.name. The adjacent
-                  // '/donation-policy' entry is the charity's own policy.
-                  name: 'Free For Charity Donation Policy',
-                  href: '/free-for-charity-donation-policy',
-                },
-                {
-                  name: 'Donation Policy',
-                  href: '/donation-policy',
-                },
-                {
-                  name: `${siteConfig.name} Privacy Policy`,
-                  href: '/privacy-policy',
-                },
-                {
-                  name: `${siteConfig.name} Cookie Policy`,
-                  href: '/cookie-policy',
-                },
-                {
-                  name: `${siteConfig.name} Terms of Service`,
-                  href: '/terms-of-service',
-                },
-                {
-                  name: `${siteConfig.name} Vulnerability Disclosure Policy`,
-                  href: '/vulnerability-disclosure-policy',
-                },
-                {
-                  name: `${siteConfig.name} Security Acknowledgement`,
-                  href: '/security-acknowledgements',
-                },
-              ].map((link) => (
-                <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="hover:text-[#F58C23] hover:tracking-widest transition-all text-[16px] font-[500]"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-              <li>
-                {/* Persistent consent re-entry point (withdrawing consent must
-                    stay as easy as giving it): reopens the preferences modal
-                    the cookie-consent banner registers on window. */}
-                <button
-                  type="button"
-                  onClick={() => window.openCookiePreferences?.()}
-                  className="hover:text-[#F58C23] hover:tracking-widest transition-all text-[16px] font-[500]"
-                >
-                  Cookie Preferences
-                </button>
-              </li>
-            </ul>
-          </div>
         </div>
 
-        {/* Column 3: Contact Us */}
+        {/* Column 3: Legal & Policies */}
+        <div className="space-y-4 px-4 sm:px-0">
+          <div>
+            <h3 className="text-[28px] text-white">Legal &amp; Policies</h3>
+            <p className="aria-font mt-1 text-[13px] font-[500] uppercase tracking-wide text-gray-300">
+              {siteConfig.name}
+            </p>
+          </div>
+
+          {policyGroups.map((group) => (
+            <div key={group.heading}>
+              <h4 className="text-[18px] font-[700] text-white">{group.heading}</h4>
+              <ul className="lato-font mt-1 list-disc space-y-1 ps-5 text-sm">
+                {group.links.map((link) => (
+                  <li key={link.name}>
+                    {link.href ? (
+                      <Link
+                        href={link.href}
+                        className="hover:text-[#F58C23] hover:tracking-widest transition-all text-[16px] font-[500]"
+                      >
+                        {link.name}
+                      </Link>
+                    ) : (
+                      // Persistent consent re-entry point (withdrawing consent
+                      // must stay as easy as giving it): reopens the preferences
+                      // modal the cookie-consent banner registers on window.
+                      <button
+                        type="button"
+                        onClick={() => window.openCookiePreferences?.()}
+                        className="hover:text-[#F58C23] hover:tracking-widest transition-all text-[16px] font-[500]"
+                      >
+                        {link.name}
+                      </button>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        {/* Column 4: Contact Us */}
         <div className="space-y-6 px-4 sm:px-0">
           <h3 className="text-[28px] text-white">Contact Us</h3>
 

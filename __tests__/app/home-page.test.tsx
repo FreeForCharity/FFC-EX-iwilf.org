@@ -1,25 +1,6 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
 
-// Mock TeamMemberCard since TheFreeForCharityTeam uses it
-jest.mock('../../src/components/ui/TeamMemberCard', () => {
-  return function MockTeamMemberCard({
-    name,
-    role,
-  }: {
-    name: string
-    role: string
-    linkedinUrl?: string
-  }) {
-    return (
-      <div data-testid="team-member-card">
-        <span>{name}</span>
-        <span>{role}</span>
-      </div>
-    )
-  }
-})
-
 import HomePage from '../../src/app/home-page'
 
 describe('HomePage (app/home-page)', () => {
@@ -27,8 +8,11 @@ describe('HomePage (app/home-page)', () => {
     render(<HomePage />)
   })
 
-  it('should render TheFreeForCharityTeam component', () => {
-    render(<HomePage />)
-    expect(screen.getAllByTestId('team-member-card').length).toBeGreaterThan(0)
+  // Leadership names live on the About page, at Ali's request. The template's
+  // team section would otherwise show them, or Free For Charity's sample team.
+  it('should not render the team section', () => {
+    const { container } = render(<HomePage />)
+    expect(container.querySelector('#team')).toBeNull()
+    expect(screen.queryByRole('heading', { name: /Team$/ })).toBeNull()
   })
 })

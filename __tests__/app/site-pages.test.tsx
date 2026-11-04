@@ -44,26 +44,27 @@ describe.each(pages)('%s page', (label, Page, title) => {
 })
 
 describe('About page tabs', () => {
-  it("has the concept's five tabs, Our Story first", () => {
+  // Selecting a tab writes its #fragment to the URL, which the next render reads.
+  afterEach(() => {
+    window.history.replaceState(null, '', window.location.pathname)
+  })
+
+  it('has Our Story and Leadership only, Our Story first', () => {
     render(<AboutUsPage />)
     const tabs = screen.getAllByRole('tab')
-    expect(tabs.map((tab) => tab.textContent)).toEqual(about.tabs.map((tab) => tab.label))
+    expect(tabs.map((tab) => tab.textContent)).toEqual(['Our Story', 'Leadership'])
     expect(tabs[0]).toHaveAttribute('aria-selected', 'true')
-    expect(screen.getByRole('tabpanel')).toHaveTextContent(about.tabs[0].paragraphs[0])
+    expect(screen.getByRole('tabpanel')).toHaveTextContent(about.tabs[0].paragraphs![0])
   })
 
   it('switches tabs on click and with the arrow keys', () => {
     render(<AboutUsPage />)
-    fireEvent.click(screen.getByRole('tab', { name: 'Financials' }))
-    expect(screen.getByRole('tab', { name: 'Financials' })).toHaveAttribute('aria-selected', 'true')
-    expect(screen.getByRole('tabpanel')).toHaveTextContent('Coming soon.')
+    fireEvent.click(screen.getByRole('tab', { name: 'Leadership' }))
+    expect(screen.getByRole('tab', { name: 'Leadership' })).toHaveAttribute('aria-selected', 'true')
 
-    fireEvent.keyDown(screen.getByRole('tab', { name: 'Financials' }), { key: 'ArrowRight' })
-    expect(screen.getByRole('tab', { name: 'News' })).toHaveAttribute('aria-selected', 'true')
-    expect(screen.getByRole('tab', { name: 'News' })).toHaveFocus()
-
-    fireEvent.keyDown(screen.getByRole('tab', { name: 'News' }), { key: 'ArrowRight' })
+    fireEvent.keyDown(screen.getByRole('tab', { name: 'Leadership' }), { key: 'ArrowRight' })
     expect(screen.getByRole('tab', { name: 'Our Story' })).toHaveAttribute('aria-selected', 'true')
+    expect(screen.getByRole('tab', { name: 'Our Story' })).toHaveFocus()
   })
 
   it('follows the URL fragment, also when it changes while the page is open', () => {
@@ -72,14 +73,70 @@ describe('About page tabs', () => {
     expect(screen.getByRole('tab', { name: 'Leadership' })).toHaveAttribute('aria-selected', 'true')
 
     act(() => {
-      window.location.hash = '#board'
+      window.location.hash = '#our-story'
       window.dispatchEvent(new HashChangeEvent('hashchange'))
     })
-    expect(screen.getByRole('tab', { name: 'Board of Directors' })).toHaveAttribute(
-      'aria-selected',
-      'true'
-    )
-    window.history.replaceState(null, '', window.location.pathname)
+    expect(screen.getByRole('tab', { name: 'Our Story' })).toHaveAttribute('aria-selected', 'true')
+  })
+
+  it('shows each leader with their title and bio sections on the Leadership tab', () => {
+    render(<AboutUsPage />)
+    fireEvent.click(screen.getByRole('tab', { name: 'Leadership' }))
+    const panel = screen.getByRole('tabpanel')
+
+    const expected = [
+      {
+        name: 'Ali Almrayatee',
+        role: 'Founder and Director',
+        headings: ['Professional Background', 'Education & Research', 'More About Ali'],
+      },
+      {
+        name: 'Samer Matroud',
+        role: 'Co-Founder and Board Member',
+        headings: ['Professional Background', 'Education', 'More About Samer'],
+      },
+    ]
+    const articles = within(panel).getAllByRole('article')
+    expect(articles).toHaveLength(expected.length)
+
+    expected.forEach(({ name, role, headings }, index) => {
+      const article = within(articles[index])
+      expect(article.getByRole('heading', { level: 3, name })).toBeInTheDocument()
+      expect(article.getByText(role)).toBeInTheDocument()
+      expect(article.getAllByRole('heading', { level: 4 }).map((h) => h.textContent)).toEqual(
+        headings
+      )
+    })
+  })
+
+  it('shows each opening paragraph and collapses the longer bio sections', () => {
+    render(<AboutUsPage />)
+    fireEvent.click(screen.getByRole('tab', { name: 'Leadership' }))
+    const panel = screen.getByRole('tabpanel')
+    const details = panel.querySelectorAll('details')
+
+    // Three collapsed sections per person.
+    expect(details).toHaveLength(6)
+    details.forEach((section) => expect(section).not.toHaveAttribute('open'))
+
+    const profiles = about.tabs.find((tab) => tab.id === 'leadership')!.profiles!
+    for (const profile of profiles) {
+      const intro = profile.sections.find((section) => !section.heading)!
+      expect(screen.getByText(intro.paragraphs[0]).closest('details')).toBeNull()
+    }
+  })
+
+  it('renders every paragraph of the bios', () => {
+    render(<AboutUsPage />)
+    fireEvent.click(screen.getByRole('tab', { name: 'Leadership' }))
+    const profiles = about.tabs.find((tab) => tab.id === 'leadership')!.profiles!
+    for (const profile of profiles) {
+      for (const section of profile.sections) {
+        for (const paragraph of section.paragraphs) {
+          expect(screen.getByText(paragraph)).toBeInTheDocument()
+        }
+      }
+    }
   })
 
   it('Meet Our Leadership opens the Leadership tab', () => {

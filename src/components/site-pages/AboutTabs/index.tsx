@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useRef, useState } from 'react'
-import { Eye, HandHeart, Medal, ShieldCheck, Target } from 'lucide-react'
+import { ChevronDown, Eye, HandHeart, Medal, ShieldCheck, Target } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import type { AboutTab, AboutTabId, ValueId } from '@/data/pages'
 
@@ -13,6 +13,8 @@ const valueIcons: Record<ValueId, LucideIcon> = {
   transparency: Eye,
 }
 
+const bodyText = 'mb-6 max-w-[62ch] font-iwilf-sans text-lg leading-8 text-iwilf-charcoal'
+
 interface AboutTabsProps {
   tabs: AboutTab[]
   meetLeadership: string
@@ -20,7 +22,7 @@ interface AboutTabsProps {
   values: Array<{ id: ValueId; label: string }>
 }
 
-// The concept's five About tabs, with Our Values beside them. Follows the WAI
+// The About tabs (Our Story and Leadership), with Our Values beside them. Follows the WAI
 // tabs pattern: arrow keys, Home and End move between tabs. A link to
 // /about-us/#leadership (or any tab id) opens that tab, including when the
 // fragment changes while the page is open.
@@ -113,20 +115,59 @@ const AboutTabs = ({ tabs, meetLeadership, valuesHeading, values }: AboutTabsPro
               className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-iwilf-navy"
             >
               <h2 className="mb-5 font-iwilf-serif text-3xl text-iwilf-navy">{tab.label}</h2>
-              {tab.paragraphs.length > 0 ? (
-                tab.paragraphs.map((paragraph) => (
-                  <p
-                    key={paragraph}
-                    className="mb-6 max-w-[62ch] font-iwilf-sans text-lg leading-8 text-iwilf-charcoal"
-                  >
-                    {paragraph}
-                  </p>
-                ))
-              ) : (
-                <p className="max-w-[62ch] rounded border border-dashed border-iwilf-bronze bg-white px-5 py-4 font-iwilf-sans text-lg text-iwilf-charcoal">
-                  Coming soon.
+              {tab.paragraphs?.map((paragraph) => (
+                <p key={paragraph} className={bodyText}>
+                  {paragraph}
                 </p>
-              )}
+              ))}
+              {tab.profiles?.map((profile) => (
+                <article
+                  key={profile.name}
+                  className="mb-12 border-b border-iwilf-stone pb-12 last:mb-0 last:border-b-0 last:pb-0"
+                >
+                  <h3 className="font-iwilf-serif text-2xl text-iwilf-navy">{profile.name}</h3>
+                  <p className="mb-6 mt-1 font-iwilf-sans text-lg font-medium text-iwilf-bronze-dark">
+                    {profile.role}
+                  </p>
+                  {/* The opening paragraph always shows; the longer sections
+                      collapse so the page reads as a summary first. Native
+                      <details>: keyboard and screen-reader support built in,
+                      and the full text stays in the page for search engines. */}
+                  {profile.sections.map((section) =>
+                    section.heading ? (
+                      <details
+                        key={section.heading}
+                        className="group max-w-[62ch] border-t border-iwilf-stone text-lg last:border-b"
+                      >
+                        <summary className="flex min-h-[52px] cursor-pointer list-none items-center justify-between gap-4 rounded py-3 hover:text-iwilf-navy focus:outline-none focus-visible:ring-2 focus-visible:ring-iwilf-navy [&::-webkit-details-marker]:hidden">
+                          <h4 className="font-iwilf-sans text-lg font-bold text-iwilf-charcoal">
+                            {section.heading}
+                          </h4>
+                          <ChevronDown
+                            aria-hidden="true"
+                            className="h-5 w-5 shrink-0 text-iwilf-navy transition-transform group-open:rotate-180 motion-reduce:transition-none"
+                          />
+                        </summary>
+                        <div className="pb-2 pt-2">
+                          {section.paragraphs.map((paragraph) => (
+                            <p key={paragraph} className={bodyText}>
+                              {paragraph}
+                            </p>
+                          ))}
+                        </div>
+                      </details>
+                    ) : (
+                      <div key="intro">
+                        {section.paragraphs.map((paragraph) => (
+                          <p key={paragraph} className={bodyText}>
+                            {paragraph}
+                          </p>
+                        ))}
+                      </div>
+                    )
+                  )}
+                </article>
+              ))}
               {tab.id === 'our-story' && (
                 <button
                   type="button"
