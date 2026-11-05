@@ -12,7 +12,8 @@ test.describe('IWILF landing page', () => {
     await page.goto('/')
     const donateLinks = page.locator(`a[href="${donateUrl}"]`)
 
-    await expect(donateLinks).toHaveCount(3)
+    // Header, hero, support section and the footer quick link.
+    await expect(donateLinks).toHaveCount(4)
     for (const link of await donateLinks.all()) {
       await expect(link).toHaveAttribute('target', '_blank')
     }

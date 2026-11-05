@@ -1,5 +1,4 @@
 import { test, expect } from '@playwright/test'
-import { testConfig } from './test.config'
 
 /**
  * Policy page smoke tests
@@ -28,14 +27,14 @@ const footerPolicyLinks = [
   // The charity's own donation policy. Matched with exact names below so this
   // does not also match "Free For Charity Donation Policy".
   { name: 'Donation Policy', href: '/donation-policy/' },
-  { name: `${testConfig.site.name} Privacy Policy`, href: '/privacy-policy/' },
-  { name: `${testConfig.site.name} Cookie Policy`, href: '/cookie-policy/' },
-  { name: `${testConfig.site.name} Terms of Service`, href: '/terms-of-service/' },
+  { name: 'Privacy Policy', href: '/privacy-policy/' },
+  { name: 'Cookie Policy', href: '/cookie-policy/' },
+  { name: 'Terms of Service', href: '/terms-of-service/' },
   {
-    name: `${testConfig.site.name} Vulnerability Disclosure Policy`,
+    name: 'Vulnerability Disclosure Policy',
     href: '/vulnerability-disclosure-policy/',
   },
-  { name: `${testConfig.site.name} Security Acknowledgement`, href: '/security-acknowledgements/' },
+  { name: 'Security Acknowledgement', href: '/security-acknowledgements/' },
 ]
 
 test.describe('Policy pages', () => {

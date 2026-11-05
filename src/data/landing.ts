@@ -1,10 +1,10 @@
 // Landing-page copy for the Iraq War Interpreters Legacy Foundation, taken from
-// the design concept Ali attached to issue #5 (2026-09-30). Kept here rather
-// than in site.config.ts so this content does not collide with FFC's in-flight
-// rebrand PRs (#6 / #7).
+// the design concept Ali attached to issue #5 (2026-09-30).
 //
 // No interpreter names, faces, locations or statistics belong here until Ali
 // approves each one.
+
+import { siteConfig } from '@/lib/site.config'
 
 export interface NavLink {
   label: string
@@ -16,18 +16,15 @@ export interface MissionPillar {
   description: string
 }
 
-export const orgName = 'Iraq War Interpreters Legacy Foundation'
+export const orgName = siteConfig.name
 
-// Ali's Zeffy form (issue #5, 2026-09-30). Linked out, not embedded: an iframe
-// would need a CSP change, which is FFC's call. Move to siteConfig.donationUrl
-// once the rebrand lands.
-export const donateUrl = 'https://www.zeffy.com/en-US/donation-form/support-iwilfs-mission'
+// Ali's Zeffy form. Linked out, not embedded: an iframe would need a CSP
+// change, which is FFC's call.
+export const donateUrl = siteConfig.donationUrl
 
 // Home, then the site pages in the order Ali set (issue #5 follow-up,
 // 2026-11-02), About Us first. Bare routes for next/link, which adds the
 // GitHub Pages base path.
-// Contact joins once the footer shows IWILF's details (FFC's rebrand, #6);
-// until then the footer's Contact block still lists FFC's.
 export const navLinks: NavLink[] = [
   { label: 'Home', href: '/' },
   { label: 'About Us', href: '/about-us' },

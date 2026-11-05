@@ -49,14 +49,16 @@ describe('Footer component', () => {
 
   it('should have GuideStar profile link', () => {
     render(<Footer />)
-    expect(screen.getByLabelText(`View ${siteConfig.name} GuideStar Profile`)).toHaveAttribute(
-      'href',
-      siteConfig.guidestar.profileUrl
-    )
     expect(screen.getByText('Direct GuideStar Profile Link').closest('a')).toHaveAttribute(
       'href',
       siteConfig.guidestar.directProfileUrl
     )
+  })
+
+  // IWILF has no seal yet, and the template's seal is Free For Charity's.
+  it('should not show a GuideStar seal', () => {
+    render(<Footer />)
+    expect(screen.queryByAltText(/GuideStar/)).not.toBeInTheDocument()
   })
 
   it('should have email contact link', () => {
@@ -124,7 +126,10 @@ describe('Footer component', () => {
 
   it('should display the charity policy section', () => {
     render(<Footer />)
-    expect(screen.getByText(`${siteConfig.name} Policy`)).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Legal & Policies' })).toBeInTheDocument()
+    for (const heading of ['Donations', 'Privacy & Website', 'Security & Compliance']) {
+      expect(screen.getByRole('heading', { name: heading })).toBeInTheDocument()
+    }
   })
 
   it('should have all social media links with correct aria-labels', () => {
@@ -168,14 +173,14 @@ describe('Footer component', () => {
       { text: 'Free For Charity Donation Policy', href: '/free-for-charity-donation-policy' },
       // The charity's own donation policy: fixed label, no name interpolation.
       { text: 'Donation Policy', href: '/donation-policy' },
-      { text: `${siteConfig.name} Privacy Policy`, href: '/privacy-policy' },
-      { text: `${siteConfig.name} Cookie Policy`, href: '/cookie-policy' },
-      { text: `${siteConfig.name} Terms of Service`, href: '/terms-of-service' },
+      { text: 'Privacy Policy', href: '/privacy-policy' },
+      { text: 'Cookie Policy', href: '/cookie-policy' },
+      { text: 'Terms of Service', href: '/terms-of-service' },
       {
-        text: `${siteConfig.name} Vulnerability Disclosure Policy`,
+        text: 'Vulnerability Disclosure Policy',
         href: '/vulnerability-disclosure-policy',
       },
-      { text: `${siteConfig.name} Security Acknowledgement`, href: '/security-acknowledgements' },
+      { text: 'Security Acknowledgement', href: '/security-acknowledgements' },
     ]
 
     for (const { text, href } of policyLinks) {
@@ -331,11 +336,6 @@ describe('Footer component', () => {
     expect(hubLink).toHaveAttribute('href', siteConfig.supportedBy.hubUrl)
     expect(hubLink).toHaveAttribute('target', '_blank')
     expect(hubLink).toHaveAttribute('rel', 'noopener noreferrer')
-  })
-
-  it('should have GuideStar image with alt text', () => {
-    render(<Footer />)
-    expect(screen.getByAltText('GuideStar Platinum Seal of Transparency')).toBeInTheDocument()
   })
 
   it('should have Google Maps links for addresses', () => {
